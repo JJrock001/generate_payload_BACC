@@ -1,0 +1,2113 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CBS Mock Data Generator</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: "#16a34a", // A nice green for banking/agriculture
+              secondary: "#4ade80",
+            },
+          },
+        },
+      };
+    </script>
+    <!-- Google Fonts: Sarabun -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      body {
+        font-family: "Sarabun", "Angsana New", sans-serif;
+        background-color: #f8fafc;
+      }
+
+      /* Syntax Highlighter basic styling for textarea */
+      textarea {
+        font-family:
+          ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+          "Liberation Mono", "Courier New", monospace;
+        tab-size: 2;
+      }
+
+      .nav-button.active {
+        background-color: #16a34a;
+        color: white;
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <body class="h-screen flex flex-col md:flex-row overflow-hidden text-slate-800">
+    
+    <!-- 1. Sidebar Navigation (Left) -->
+    <aside class="w-full md:w-64 bg-white shadow-lg border-r border-slate-200 flex flex-col z-20">
+      <div class="h-16 flex items-center justify-center border-b border-slate-100 bg-emerald-50 shrink-0">
+        <h1 class="text-xl font-bold text-primary flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26 .367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+          </svg>
+          CBS Mock Data
+        </h1>
+      </div>
+      <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
+        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3 px-2">Create APIs</p>
+        <button onclick="selectApi('personalCustomer')" id="nav-personalCustomer" class="nav-button active w-full text-left px-4 py-3 rounded-lg text-sm transition-colors text-slate-600 hover:bg-green-50 hover:text-primary">
+          1. Personal Customer
+        </button>
+        <button onclick="selectApi('corporateCustomer')" id="nav-corporateCustomer" class="nav-button w-full text-left px-4 py-3 rounded-lg text-sm transition-colors text-slate-600 hover:bg-green-50 hover:text-primary">
+          2. Corporate Customer
+        </button>
+        <button onclick="selectApi('customerRegistration')" id="nav-customerRegistration" class="nav-button w-full text-left px-4 py-3 rounded-lg text-sm transition-colors text-slate-600 hover:bg-green-50 hover:text-primary">
+          3. Customer Registration
+        </button>
+        <button onclick="selectApi('collateralCreater')" id="nav-collateralCreater" class="nav-button w-full text-left px-4 py-3 rounded-lg text-sm transition-colors text-slate-600 hover:bg-green-50 hover:text-primary">
+          4. Create Collateral
+        </button>
+        <button onclick="selectApi('createCollateralOwner')" id="nav-createCollateralOwner" class="nav-button w-full text-left px-4 py-3 rounded-lg text-sm transition-colors text-slate-600 hover:bg-green-50 hover:text-primary">
+          5. Create Collateral Owner
+        </button>
+      </nav>
+      <div class="p-4 border-t border-slate-100 shrink-0">
+        <div class="text-xs text-slate-400 text-center">Version 1.2</div>
+      </div>
+    </aside>
+
+    <!-- 2. Configuration Panel (Middle) -->
+    <section class="w-full md:w-80 bg-slate-50 border-r border-slate-200 flex flex-col z-10 shadow-[inset_-4px_0px_10px_-10px_rgba(0,0,0,0.1)]">
+      <header class="h-16 bg-white border-b border-slate-200 flex items-center px-4 shrink-0">
+        <h2 class="text-sm font-semibold text-slate-700 uppercase tracking-wide">Configuration</h2>
+      </header>
+      
+      <div class="flex-1 p-5 overflow-y-auto">
+        <!-- Default Empty State -->
+        <div id="config-empty-state" class="hidden text-center text-slate-400 mt-10">
+           <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mx-auto mb-3 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+           </svg>
+           <p class="text-sm">No specific configuration available for this API.</p>
+        </div>
+
+        <!-- Collateral Owner Config Form -->
+        <div id="config-collateral-owner-panel" class="hidden space-y-3">
+            <h3 class="text-sm font-semibold text-slate-800 mb-4 border-b border-slate-200 pb-2">Collateral Owner Configuration</h3>
+
+            <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm space-y-3">
+              <div>
+                <label for="cfg-owner-customer-id" class="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wider">CIF / customer_id</label>
+                <input type="text" id="cfg-owner-customer-id" value="18852" placeholder="e.g. 18852" class="w-full px-3 py-2 border border-slate-300 rounded-md text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" oninput="markCollateralOwnerEdited('cfg-owner-customer-id'); generateData()">
+              </div>
+              <div>
+                <label for="cfg-owner-coll-id" class="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wider">Collateral ID / coll_id</label>
+                <input type="text" id="cfg-owner-coll-id" value="15880" placeholder="e.g. 15880" class="w-full px-3 py-2 border border-slate-300 rounded-md text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" oninput="markCollateralOwnerEdited('cfg-owner-coll-id'); generateData()">
+              </div>
+              <p class="text-xs text-slate-500">partial_pledge_owner_flag is fixed to false.</p>
+            </div>
+        </div>
+
+        <!-- Address Config Form -->
+        <div id="config-address-panel">
+            <h3 class="text-sm font-semibold text-slate-800 mb-4 border-b border-slate-200 pb-2">Address Configuration</h3>
+
+            <div id="config-collateral-panel" class="hidden mb-4 space-y-3">
+              <div>
+                <label for="cfg-coll-type" class="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wider">ประเภทหลักประกัน</label>
+                <select id="cfg-coll-type" onchange="toggleCollateralSubtypeFields(this.value); generateData(this.value)" class="w-full px-3 py-2 border border-slate-300 rounded-md text-sm bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"></select>
+              </div>
+              <div>
+                <label for="cfg-coll-subtype" class="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wider">Sub Type</label>
+                <select id="cfg-coll-subtype" onchange="generateData()" class="w-full px-3 py-2 border border-slate-300 rounded-md text-sm bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary disabled:bg-slate-100 disabled:text-slate-400 disabled:border-slate-200 disabled:cursor-not-allowed" disabled></select>
+              </div>
+              <div id="config-bot-coll-code-panel" class="hidden">
+                <label for="cfg-bot-coll-code" class="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wider">รหัสหลักประกันธนาคารแห่งประเทศไทย</label>
+                <select id="cfg-bot-coll-code" onchange="toggleLandPriceFields(); generateData()" class="w-full px-3 py-2 border border-slate-300 rounded-md text-sm bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary disabled:bg-slate-100 disabled:text-slate-400 disabled:border-slate-200 disabled:cursor-not-allowed" disabled></select>
+              </div>
+              <div id="config-build-type-panel" class="hidden">
+                <div class="mt-3 hidden space-y-3" id="config-build-bot-code-panel">
+                  <div>
+                    <label for="cfg-build-bot-coll-code" class="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wider">รหัสหลักประกันธนาคารแห่งประเทศไทย</label>
+                    <select id="cfg-build-bot-coll-code" onchange="updateBuildSubBotOptions(); generateData()" class="w-full px-3 py-2 border border-slate-300 rounded-md text-sm bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"></select>
+                  </div>
+                  <div>
+                    <label for="cfg-build-sub-bot-coll-code" class="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wider">รหัสหลักประกันย่อย</label>
+                    <select id="cfg-build-sub-bot-coll-code" onchange="generateData()" class="w-full px-3 py-2 border border-slate-300 rounded-md text-sm bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"></select>
+                  </div>
+                </div>
+                <label for="cfg-build-type" class="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wider">ประเภทสิ่งปลูกสร้าง</label>
+                <select id="cfg-build-type" onchange="generateData()" class="w-full px-3 py-2 border border-slate-300 rounded-md text-sm bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary disabled:bg-slate-100 disabled:text-slate-400 disabled:border-slate-200 disabled:cursor-not-allowed" disabled></select>
+                <div class="mt-3 hidden" id="config-build-appraisal-panel">
+                  <label for="cfg-build-appraisal-value" class="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wider">ราคาประเมิน</label>
+                  <input type="number" id="cfg-build-appraisal-value" min="0" placeholder="e.g. 1500000" class="w-full px-3 py-2 border border-slate-300 rounded-md text-sm bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" oninput="generateData()">
+                </div>
+              </div>
+              <div id="config-machine-bot-code-panel" class="hidden">
+                <label for="cfg-machine-bot-coll-code" class="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wider">รหัสหลักประกันธนาคารแห่งประเทศไทย</label>
+                <select id="cfg-machine-bot-coll-code" onchange="generateData()" class="w-full px-3 py-2 border border-slate-300 rounded-md text-sm bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"></select>
+              </div>
+              <div>
+                <label for="cfg-sub-bot-coll-code" class="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wider">รหัสหลักประกันย่อย</label>
+                <select id="cfg-sub-bot-coll-code" onchange="generateData()" class="w-full px-3 py-2 border border-slate-300 rounded-md text-sm bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary disabled:bg-slate-100 disabled:text-slate-400 disabled:border-slate-200 disabled:cursor-not-allowed" disabled></select>
+              </div>
+              <div id="config-machine-appraisal-panel" class="hidden">
+                <label for="cfg-machine-appraisal-value" class="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wider">ราคาประเมิน</label>
+                <input type="number" id="cfg-machine-appraisal-value" min="0" placeholder="e.g. 1000000" class="w-full px-3 py-2 border border-slate-300 rounded-md text-sm bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" oninput="generateData()">
+              </div>
+              <div id="config-other-bot-code-panel" class="hidden space-y-3">
+                <div>
+                  <label for="cfg-other-bot-coll-code" class="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wider">รหัสหลักประกันธนาคารแห่งประเทศไทย</label>
+                  <select id="cfg-other-bot-coll-code" onchange="generateData()" class="w-full px-3 py-2 border border-slate-300 rounded-md text-sm bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"></select>
+                </div>
+                <div>
+                  <label for="cfg-other-sub-bot-coll-code" class="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wider">รหัสหลักประกันย่อย</label>
+                  <input type="text" id="cfg-other-sub-bot-coll-code" value="0" placeholder="0" class="w-full px-3 py-2 border border-slate-300 rounded-md text-sm bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" oninput="generateData()">
+                </div>
+              </div>
+              <div id="config-type4-panel" class="hidden space-y-3">
+                <div>
+                  <label for="cfg-type4-account-no" class="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wider">account_no <span class="text-red-500">*must have</span></label>
+                  <input type="text" id="cfg-type4-account-no" value="" placeholder="eg. 00000000000" class="w-full px-3 py-2 border border-slate-300 rounded-md text-sm bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" oninput="generateData()">
+                </div>
+                <div>
+                  <label for="cfg-type4-aprs-value" class="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wider">ราคาประเมิน <span class="text-red-500">*must less than account balance</span> </label>
+                  <input type="number" id="cfg-type4-aprs-value" min="0" placeholder="eg. 1000000" class="w-full px-3 py-2 border border-slate-300 rounded-md text-sm bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" oninput="generateData()">
+                </div>
+              </div>
+              <div id="config-room-area-panel" class="hidden">
+                <label for="cfg-room-area" class="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wider">ขนาดพื้นที่ห้องชุด (ตารางเมตร)</label>
+                <input type="number" id="cfg-room-area" value="1600" min="0" placeholder="e.g. 1600" class="w-full px-3 py-2 border border-slate-300 rounded-md text-sm bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" oninput="generateData()">
+              </div>
+              <div id="config-room-aprs-panel" class="hidden">
+                <label for="cfg-room-aprs-value" class="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wider">ราคาประเมิน</label>
+                <input type="number" id="cfg-room-aprs-value" value="2000000" min="0" placeholder="e.g. 2000000" class="w-full px-3 py-2 border border-slate-300 rounded-md text-sm bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" oninput="generateData()">
+              </div>
+              <div id="config-type13-aprs-panel" class="hidden">
+                <label for="cfg-type13-aprs-value" class="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wider">ราคาประเมิน</label>
+                <input type="number" id="cfg-type13-aprs-value" value="2000000" min="0" placeholder="e.g. 2000000" class="w-full px-3 py-2 border border-slate-300 rounded-md text-sm bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" oninput="generateData()">
+              </div>
+              <div id="config-type14-salak-panel" class="hidden">
+                <label for="cfg-type14-salak-account" class="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wider">ทะเบียนเลขที่ <span class="text-red-500">*MUST HAVE</span></label>
+                <input type="text" id="cfg-type14-salak-account" value="" placeholder="e.g. 400004277461" class="w-full px-3 py-2 border border-slate-300 rounded-md text-sm bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" oninput="generateData()">
+              </div>
+              <div id="config-type14-aprs-panel" class="hidden">
+                <label for="cfg-type14-aprs-value" class="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wider">ราคาประเมิน <span class="text-red-500">*must less than account balance</span></label>
+                <input type="number" id="cfg-type14-aprs-value" value="2000000" min="0" placeholder="e.g. 2000000" class="w-full px-3 py-2 border border-slate-300 rounded-md text-sm bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" oninput="generateData()">
+              </div>
+              <div id="config-type7-panel" class="hidden">
+                <label for="cfg-type7-guarantor-cif-no" class="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wider">guarantor_cif_no <span class="text-red-500">*MUST HAVE</span></label>
+                <input type="text" id="cfg-type7-guarantor-cif-no" value="" placeholder="e.g. 1885200000000" class="w-full px-3 py-2 border border-slate-300 rounded-md text-sm bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" oninput="generateData()">
+                <div class="mt-3">
+                  <label for="cfg-type7-bot-coll-code" class="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wider">รหัสหลักประกันของประเทศไทย</label>
+                  <input type="text" id="cfg-type7-bot-coll-code" value="286071" placeholder="286071" class="w-full px-3 py-2 border border-slate-300 rounded-md text-sm bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" oninput="generateData()">
+                </div>
+                <div class="mt-3">
+                  <label for="cfg-type7-sub-bot-coll-code" class="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wider">หลักประกันย่อย</label>
+                  <input type="text" id="cfg-type7-sub-bot-coll-code" value="0" placeholder="0" class="w-full px-3 py-2 border border-slate-300 rounded-md text-sm bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" oninput="generateData()">
+                </div>
+              </div>
+              <div id="config-land-doc-subtype-panel" class="hidden">
+                <label for="cfg-land-doc-subtype" class="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wider">ประเภทอสังหาริมทรัพย์ย่อย</label>
+                <select id="cfg-land-doc-subtype" onchange="generateData()" class="w-full px-3 py-2 border border-slate-300 rounded-md text-sm bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"></select>
+              </div>
+              <div id="config-land-price-panel" class="hidden space-y-3">
+                <div>
+                  <label for="cfg-land-value" class="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wider">ราคาที่ดิน</label>
+                  <input type="number" id="cfg-land-value" min="0" placeholder="e.g. 2500000" class="w-full px-3 py-2 border border-slate-300 rounded-md text-sm bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" oninput="generateData()">
+                </div>
+                <div id="config-build-price-group" class="hidden">
+                  <label for="cfg-build-value" class="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wider">ราคาสิ่งปลูกสร้าง</label>
+                  <input type="number" id="cfg-build-value" min="0" placeholder="e.g. 500000" class="w-full px-3 py-2 border border-slate-300 rounded-md text-sm bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" oninput="generateData()">
+                </div>
+              </div>
+              <div id="config-type99-product-panel" class="hidden">
+                <label for="cfg-type-of-commudity" class="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wider">ประเภทสินค้า</label>
+                <select id="cfg-type-of-commudity" onchange="generateData()" class="w-full px-3 py-2 border border-slate-300 rounded-md text-sm bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"></select>
+              </div>
+              <div id="config-type99-aprs-panel" class="hidden">
+                <label for="cfg-type99-aprs-value" class="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wider">ราคาประเมิน</label>
+                <input type="number" id="cfg-type99-aprs-value" value="2000000" min="0" placeholder="e.g. 2000000" class="w-full px-3 py-2 border border-slate-300 rounded-md text-sm bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" oninput="generateData()">
+              </div>
+              <div id="config-bond-expire-panel" class="hidden">
+                <label for="cfg-bond-expire-range" class="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wider">หมดอายุพันธบัตร</label>
+                <select id="cfg-bond-expire-range" onchange="generateData()" class="w-full px-3 py-2 border border-slate-300 rounded-md text-sm bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary disabled:bg-slate-100 disabled:text-slate-400 disabled:border-slate-200 disabled:cursor-not-allowed" disabled></select>
+                <div class="mt-3">
+                  <label class="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wider">เลขที่ตราสาร</label>
+                  <div class="flex gap-2">
+                    <input type="number" id="cfg-bond-start-number" value="1" min="0" placeholder="เริ่ม เช่น 1" class="w-1/3 px-3 py-2 border border-slate-300 rounded-md text-sm bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" oninput="generateData()">
+                    <div class="flex items-center text-sm text-slate-600">to</div>
+                    <input type="number" id="cfg-bond-end-number" value="100" min="0" placeholder="ถึง เช่น 100" class="w-1/3 px-3 py-2 border border-slate-300 rounded-md text-sm bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" oninput="generateData()">
+                  </div>
+                  <div class="mt-2">
+                    <label class="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wider">ครั้งที่ออกเอกสาร <span class="text-red-500">*primary key</span></label>
+                    <input type="number" id="cfg-bond-sequence" value="1" min="1" placeholder="เช่น 1" class="w-1/3 px-3 py-2 border border-slate-300 rounded-md text-sm bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" oninput="generateData()">
+                  </div>
+                  <div class="mt-2 flex gap-4">
+                    <div class="flex-1">
+                      <label class="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wider">ราคาที่ตราไว้ต่อหน่วย</label>
+                      <input type="number" id="cfg-bond-unit-price" value="1000" min="0" placeholder="เช่น 1000" class="w-full px-3 py-2 border border-slate-300 rounded-md text-sm bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" oninput="generateData()">
+                    </div>
+                    <div class="flex-1">
+                      <label class="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wider">ราคาตลาดต่อหน่วย</label>
+                      <input type="number" id="cfg-stock-market-price" value="500" min="0" placeholder="เช่น 500" class="w-full px-3 py-2 border border-slate-300 rounded-md text-sm bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" oninput="generateData()">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <label class="flex items-center gap-2 text-sm text-slate-700 font-medium mb-4 cursor-pointer">
+              <input type="checkbox" id="rand-address-toggle" checked onchange="toggleAddressInputs()" class="w-4 h-4 text-primary rounded border-slate-300 focus:ring-primary">
+              Randomize Address Fields
+            </label>
+            
+            <div id="address-inputs-container" class="space-y-4 opacity-50 pointer-events-none transition-opacity duration-300">
+                <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm space-y-3">
+                <div id="customer-type-config-group">
+                  <label class="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wider"><span id="cfg-customer-type-label">Customer Type</span></label>
+                      <input type="text" id="cfg-customer-type" value="603" placeholder="e.g. 12345" class="w-full px-3 py-2 border border-slate-300 rounded-md text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" oninput="markCustomerTypeEdited(); generateData()">
+                </div>
+                <div id="registered-date-config-group">
+                  <label class="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wider">Registered Date</label>
+                  <input type="date" id="cfg-registered-date" class="w-full px-3 py-2 border border-slate-300 rounded-md text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" oninput="generateData()">
+                </div>
+                <div id="customer-grade-config-group">
+                  <label class="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wider">Customer Grade</label>
+                  <select id="cfg-customer-grade" onchange="generateData()" class="w-full px-3 py-2 border border-slate-300 rounded-md text-sm bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary">
+                    <option value="">(random)</option>
+                    <option value="B">B</option>
+                    <option value="A">A</option>
+                    <option value="AA">AA</option>
+                    <option value="AAA">AAA</option>
+                    <option value="AAA+">AAA+</option>
+                  </select>
+                </div>
+                  <div>
+                      <label class="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wider">Province Code</label>
+                      <input type="text" id="cfg-province" placeholder="e.g. 10" class="w-full px-3 py-2 border border-slate-300 rounded-md text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" oninput="generateData()">
+                  </div>
+                  
+                  <div>
+                      <label class="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wider">District Code</label>
+                      <input type="text" id="cfg-district" placeholder="e.g. 01" class="w-full px-3 py-2 border border-slate-300 rounded-md text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" oninput="generateData()">
+                  </div>
+                  <div>
+                      <label class="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wider">Sub-district Code</label>
+                      <input type="text" id="cfg-subdistrict" placeholder="e.g. 09" class="w-full px-3 py-2 border border-slate-300 rounded-md text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" oninput="generateData()">
+                  </div>
+                  <div>
+                      <label class="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wider">Zipcode</label>
+                      <input type="text" id="cfg-zipcode" placeholder="e.g. 10200" class="w-full px-3 py-2 border border-slate-300 rounded-md text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" oninput="generateData()">
+                  </div>
+                      <div>
+                        <label class="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wider">Branch Code</label>
+                          <input type="text" id="cfg-branch-code" value="611" placeholder="e.g. 611" class="w-full px-3 py-2 border border-slate-300 rounded-md text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" oninput="generateData()">
+                      </div>
+                </div>
+
+                <div class="bg-blue-50 border border-blue-100 p-3 rounded-lg text-xs justify-start text-blue-700 leading-relaxed">
+                  <span class="font-semibold block mb-1">💡 คำแนะนำ:</span>
+                  หากเว้นว่างไว้ ระบบจะสุ่มค่าให้โดยอัตโนมัติ หากระบุค่า ระบบจะใช้ค่านั้นกับที่อยู่ทุกประเภท
+                </div>
+            </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Main Editor Area (Right) -->
+    <main class="flex-1 flex flex-col h-full bg-slate-100 relative min-w-0">
+      <!-- Header -->
+      <header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 shadow-sm z-0 shrink-0">
+        <div class="truncate mr-4">
+          <h2 id="content-title" class="text-lg font-semibold text-slate-700 truncate">Create Personal Customer</h2>
+          <p id="content-subtitle" class="text-sm text-slate-500 truncate">/v1/customers/personal/create</p>
+        </div>
+        <div class="flex gap-3 shrink-0">
+          <button onclick="generateData()" class="flex items-center gap-2 px-4 py-2 bg-primary hover:bg-green-700 text-white rounded-md text-sm font-medium transition-colors shadow-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+            <span class="hidden lg:inline">Generate Fresh Data</span>
+            <span class="lg:hidden">Generate</span>
+          </button>
+          <button onclick="copyToClipboard()" class="flex items-center gap-2 px-4 py-2 border border-slate-300 hover:border-slate-400 bg-white text-slate-700 rounded-md text-sm font-medium transition-colors shadow-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+            </svg>
+            Copy
+          </button>
+        </div>
+      </header>
+
+      <!-- Editor Window -->
+      <div class="flex-1 p-6 overflow-hidden flex flex-col">
+        <div class="flex-1 bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col">
+          <div class="bg-slate-100 border-b border-slate-200 px-4 py-2 flex items-center justify-between shrink-0">
+            <span class="text-xs font-semibold text-slate-500 uppercase">JSON Payload Body</span>
+            <span id="copy-toast" class="text-xs text-primary font-medium opacity-0 transition-opacity duration-300">Copied to clipboard!</span>
+          </div>
+          <!-- JSON Textarea -->
+          <textarea id="json-editor" class="w-full flex-1 p-4 bg-white text-slate-800 focus:outline-none resize-none overflow-y-auto leading-relaxed" spellcheck="false"></textarea>
+        </div>
+      </div>
+    </main>
+
+    <!-- Mock Data Generator Logic -->
+    <script>
+      // Data Seeders
+      const THAI_FIRST_NAMES = [ "เกษตรกร", "สมชาย", "ยอดชาย", "มานะ", "ปิติ", "วีระ", "ชูใจ", "ดวงใจ", "สมหญิง", "มณี", ];
+      const THAI_LAST_NAMES = [ "ทดสอบ", "ใจดี", "รักชาติ", "ขยันยิ่ง", "มั่งมี", "ศรีสุข", "เจริญทรัพย์", "มั่นคง", "Phoenix", ];
+      const EN_FIRST_NAMES = [ "Farmer", "Somchai", "Yodchai", "Mana", "Piti", "Veera", "Choojai", "Duangjai", "Somying", "Manee", ];
+      const EN_LAST_NAMES = [ "Test", "Jaidee", "Rakchart", "Kayanying", "Mungmee", "Srisuk", "Jaroensup", "Mankong", "Phoenix", ];
+      const CORP_TH_NAMES = [ "สหกรณ์การเกษตรสาธิต", "บริษัทมั่งมีศรีสุข จำกัด", "ห้างหุ้นส่วนจำกัด ร่ำรวย", "ทดสอบเซอร์วิสฟินิกส์", ];
+      const CORP_EN_NAMES = [ "Satit Agriculture Coop", "Mungmee Srisuk Co.,Ltd.", "Rumruay Part.,Ltd.", "Test Service Phoenix", ];
+
+      const PROVINCES = ["10", "16", "11", "14", "041"]; // BKK, Lopburi, Samut Prakan, Ayutthaya, Udon
+      const DISTRICTS = ["01", "02", "16", "03"];
+      const SUB_DISTRICTS = ["09", "06", "04", "15", "001"];
+
+      // Edit this list when business finalizes collateral types.
+      const COLLATERAL_TYPES = [
+        { value: "1", description: "ที่ดิน" },
+        { value: "2", description: "สิ่งปลูกสร้าง" },
+        { value: "3", description: "เครื่องจักร" },
+        { value: "4", description: "บัญชีเงินฝาก" },
+        { value: "5", description: "พันธบัตร" },
+        { value: "7", description: "บุคคล/นิติบุคคลค้ำประกัน" },
+        { value: "8", description: "คอนโดมีเนียม/ห้องชุด" },
+        { value: "13", description: "หนังสือค้ำประกัน" },
+        { value: "14", description: "สลาก" },
+        { value: "17", description: "อสังหาริมทรัพย์อื่นๆ" },
+        { value: "99", description: "อื่นๆ" },
+      ];
+
+      // Current APIs use Address panel; future APIs default to empty-state unless mapped.
+      const API_CONFIG_PANEL_MAP = {
+        personalCustomer: "address",
+        corporateCustomer: "address",
+        customerRegistration: "address",
+        collateralCreater: "address",
+        createCollateralOwner: "owner",
+      };
+
+      // Preset by collateral type for Create Collateral payload expansion.
+      const COLLATERAL_TYPE_PAYLOAD_PRESETS = {
+        "1": {
+          coll_subtype: "1",
+          bot_coll_code: "286003",
+          fieldOverrides: {},
+        },
+        "2": {
+          coll_subtype: "0",
+          bot_coll_code: "286004",
+          fieldOverrides: {},
+        },
+        "3": {
+          coll_subtype: "0",
+          bot_coll_code: "286011",
+          fieldOverrides: {},
+        },
+        "4": {
+          coll_subtype: "0",
+          bot_coll_code: "286018",
+          fieldOverrides: {},
+        },
+        "5": {
+          coll_subtype: "0",
+          bot_coll_code: "286018",
+          fieldOverrides: {},
+        },
+        "7": {
+          coll_subtype: "0",
+          bot_coll_code: "286071",
+          fieldOverrides: {},
+        },
+        "8": {
+          coll_subtype: "0",
+          bot_coll_code: "286018",
+          fieldOverrides: {},
+        },
+        "13": {
+          coll_subtype: "1",
+          bot_coll_code: "286061",
+          fieldOverrides: {},
+        },
+        "14": {
+          coll_subtype: "0",
+          bot_coll_code: "286023",
+          fieldOverrides: {},
+        },
+        "17": {
+          coll_subtype: "1",
+          bot_coll_code: "286007",
+          fieldOverrides: {},
+        },
+        "99": {
+          coll_subtype: "0",
+          bot_coll_code: "286039",
+          fieldOverrides: {},
+        },
+      };
+
+      // Option sources for config selects.
+      const COLL_SUBTYPE_OPTIONS_LAND = [
+        { value: "1", description: "โฉนด" },
+        { value: "2", description: "นส3ก" },
+        { value: "3", description: "ตราจอง" },
+        { value: "4", description: "นส3" },
+        { value: "5", description: "นส 3 ข" },
+      ];
+      
+      const COLL_SUBTYPE_OPTIONS_DEFAULT = [
+        { value: "0", description: "0" },
+      ];
+
+      const COLL_SUBTYPE_OPTIONS_DEFAULT_1 = [
+        { value: "1", description: "1" },
+      ];
+
+      const COLL_SUBTYPE_OPTIONS_13 = [
+        { value: "1", description: "บสย." },
+        { value: "2", description: "บสย. (Portfolio Guarantee Scheme)" },
+        { value: "3", description: "กองทุนบำเหน็ดตกทอด" },
+        { value: "4", description: "หนังสือประกันกระทรวงการคลัง" },
+      ];
+
+      const LAND_DOC_SUBTYPE_OPTIONS_17 = [
+        { value: "1", description: "ส.ป.ก. 4-01 สัญญาอนุญาตให้เข้าทำประโยชน์ในเขตปฏิรูปที่ดิน" },
+        { value: "2", description: "ส.ป.ก. 4-14 สัญญาเช่าที่ดินเพื่อเกษตรกรรม" },
+        { value: "3", description: "ส.ป.ก. 4-18 สัญญาเช่าซื้อที่ดินเพื่อเกษตรกรรม" },
+        { value: "4", description: "สปก. 4-28" },
+        { value: "5", description: "โฉนด สปก." },
+        { value: "6", description: "น.ส. 3 ก ส.ป.ก. หนังสือรับรองการทำประโยชน์ในเขตปฏิรูปที่ดิน" },
+        { value: "7", description: "น.ส. 3 ส.ป.ก. หนังสือรับรองการทำประโยชน์ในเขตปฏิรูปที่ดิน" },
+        { value: "8", description: "น.ส. 3 ส.ป.ก. หนังสือรับรองการทำประโยชน์ในเขตปฏิรูปที่ดิน" },
+        { value: "9", description: "ส.ป.ก. 4-01 ก สัญญาอนุญาตให้เข้าทำประโยชน์ในเขตปฏิรูปที่ดิน" },
+        { value: "10", description: "ส.ป.ก. 4-01 ก สัญญาอนุญาตให้เข้าทำประโยชน์ในเขตปฏิรูปที่ดิน" },
+        { value: "11", description: "ส.ป.ก. 4-01 ก สัญญาอนุญาตให้เข้าทำประโยชน์ในเขตปฏิรูปที่ดิน" },
+        { value: "12", description: "ส.ป.ก. 4-01 ก สัญญาอนุญาตให้เข้าทำประโยชน์ในเขตปฏิรูปที่ดิน" },
+        { value: "13", description: "ส.ป.ก. 4-18 สัญญาเช่าซื้อที่ดินเพื่อเกษตรกรรม" },
+        { value: "14", description: "ส.ป.ก. 4-18 สัญญาเช่าซื้อที่ดินเพื่อเกษตรกรรม" },
+        { value: "15", description: "เอกสารแสดงสิทธิอื่นที่ออกตาม พ.ร.บ. ส.ป.ก. พ.ศ. 2518 และที่แก้ไขเพิ่มเติม" },
+        { value: "16", description: "ส.ป.ก. 4-118 สัญญาเช่าทำประโยชน์ในที่ดินหรืออสังหาริมทรัพย์ฯ" },
+        { value: "17", description: "ส.ป.ก. 4-119 สัญญาเช่าที่ดินหรืออสังหาริมทรัพย์ฯ" },
+        { value: "18", description: "ส.ป.ก. 4-140 สัญญาเช่าที่ดินสำหรับสถาบันเกษตรกร" },
+        { value: "19", description: "ส.ป.ก. 4-168 โฉนดเพื่อการเกษตร" },
+      ];
+
+      const SUB_BOT_COLL_CODE_OPTIONS_LAND = [
+        { value: "0", description: "ที่ดินเปล่า" },
+        { value: "1", description: "แผงค้า" },
+        { value: "2", description: "พื้นที่ในห้างสรรพสินค้า" },
+      ];
+
+      const SUB_BOT_COLL_CODE_OPTIONS_MACH = [
+        { value: "0", description: "เครื่องจักรที่มีเลขทะเบียน" },
+        { value: "1", description: "เครื่องจักรที่ไม่มีเลขทะเบียน" },
+        { value: "2", description: "เครื่องจักรที่เป็นใบสั่งซื้อ" },
+      ];
+      
+      const SUB_BOT_COLL_CODE_OPTIONS_BOND = [
+        { value: "0", description: "0" },
+      ];
+
+      const BOT_COLL_CODE_OPTIONS_LAND = [
+        { value: "286003", description: "ที่ดิน" },
+        { value: "286006", description: "ที่ดินพร้อมสิ่งปลูกสร้าง" },
+      ];
+
+      const BOT_COLL_CODE_OPTIONS_BUILD = [
+        { value: "286004", description: "อาคารสิ่งปลูกสร้าง" },
+        { value: "286008", description: "อื่นๆ ที่เกี่ยวกับที่ดินและสิ่งปลูกสร้าง" },
+      ];
+
+      const BUILD_SUB_BOT_COLL_CODE_OPTIONS_BY_BOT_CODE = {
+        "286004": [
+          { value: "0", description: "อาคารสิ่งปลูกสร้าง" },
+        ],
+        "286008": [
+          { value: "0", description: "ที่ดินและอื่นๆ" },
+          { value: "1", description: "ต้นไม้" },
+          { value: "2", description: "ไม้ยืนต้น" },
+          { value: "3", description: "แผงค้า" },
+          { value: "4", description: "พื้นที่ห้างสรรพสินค้า" },
+          { value: "5", description: "สถานศึกษาเอกชน" },
+        ],
+      };
+
+      const BOT_COLL_CODE_OPTIONS_MACH = [
+        { value: "286011", description: "เครื่องจักร" },
+      ];
+
+      const BOT_COLL_CODE_OPTIONS_99 = [
+        { value: "286014", description: "สินค้าคงคลัง" },
+        { value: "286039", description: "เรือสินค้าหรือเรือขนทรายหรือเรือยนต์ทุกประเภท" },
+      ];
+
+      const BOT_COLL_CODE_OPTIONS_4 = [
+        { value: "286018", description: "ใบฝสกประจำหรือบัญชีเงินฝาก" },
+        { value: "286019", description: "เงินฝากออมทีัพย์" },
+        { value: "286020", description: "บัตรเงินฝาก" },
+      ];
+
+      const BOT_COLL_CODE_OPTIONS_5 = [
+        { value: "286018", description: "พันธบัตร" },
+      ];
+
+      const BOT_COLL_CODE_OPTIONS_8 = [
+        { value: "286008", description: "อื่นๆ" },
+        { value: "286066", description: "อาคารชุด" },
+      ];
+
+      const BUILD_TYPE_OPTIONS_STRUCTURE = [
+        { value: "1", description: "ที่อยู่อาศัย" },
+        { value: "2", description: "โรงงาน" },
+        { value: "3", description: "โรงแรม" },
+        { value: "4", description: "อพาร์ตเมนต์" },
+        { value: "5", description: "โรงพยาบาล" },
+        { value: "6", description: "อาคารพาณิชย์" },
+        { value: "7", description: "ทาวเฮาส์" },
+        { value: "8", description: "อื่นๆ" },
+        { value: "9", description: "ไม้ยืนต้น" },
+        { value: "10", description: "ต้นไม้และสิ่งปลูกสร้าง" },
+      ];
+
+      const BUILD_TYPE_RANDOM_WHEN_OTHER = ["1", "2", "3", "4", "5", "6", "7", "9"];
+
+      const TYPE_OF_COMMUDITY_OPTIONS_99 = [
+        { value: "1", description: "ข้าว" },
+        { value: "2", description: "มันสำปะหลัง" },
+        { value: "3", description: "ข้าวโพด" },
+        { value: "4", description: "ปาล์มน้ำมัน" },
+        { value: "5", description: "ยางพารา(น้ำยางข้น)" },
+        { value: "6", description: "ยางพารา(ยางแท่ง)" },
+        { value: "7", description: "ยางแผ่นรมควัน" },
+        { value: "8", description: "ลำไยอบแห้ง" },
+        { value: "9", description: "ถั่วเหลือง" },
+        { value: "11", description: "ข้าวขาว 5%" },
+        { value: "12", description: "ข้าวประเภทอื่น ๆ" },
+        { value: "21", description: "ยางแผ่นรมควันชั้น 3" },
+        { value: "22", description: "ยางแท่งเอสทีอาร์ 20" },
+        { value: "23", description: "น้ำยางข้น" },
+        { value: "24", description: "ยางพาราประเภทอื่น ๆ" },
+        { value: "31", description: "แป้งมันสำปะหลังชั้นพิเศษ" },
+        { value: "32", description: "แป้งมันสำปะหลังประเภทอื่น ๆ" },
+        { value: "99", description: "สินค้าอื่น ๆ" },
+      ];
+
+      const BOND_EXPIRE_RANGE_OPTIONS = [
+        { value: "0-4", description: "0-4" },
+        { value: "4-8", description: "4-8" },
+        { value: "8-12", description: "8-12" },
+        { value: "12-16", description: "12-16" },
+        { value: "16-999", description: "16-999" },
+      ];
+
+      // Option mapping by collateral type.
+      const COLL_SUBTYPE_OPTIONS_BY_COLL_TYPE = {
+        "1": COLL_SUBTYPE_OPTIONS_LAND,
+        "2": COLL_SUBTYPE_OPTIONS_DEFAULT,
+        "3": COLL_SUBTYPE_OPTIONS_DEFAULT,
+        "5": COLL_SUBTYPE_OPTIONS_DEFAULT,
+        "8": COLL_SUBTYPE_OPTIONS_DEFAULT,
+        "13": COLL_SUBTYPE_OPTIONS_13,
+        "14": COLL_SUBTYPE_OPTIONS_DEFAULT,
+        "17": COLL_SUBTYPE_OPTIONS_DEFAULT_1,
+        "99": COLL_SUBTYPE_OPTIONS_DEFAULT,
+      };
+
+      const LAND_DOC_SUBTYPE_OPTIONS_BY_COLL_TYPE = {
+        "17": LAND_DOC_SUBTYPE_OPTIONS_17,
+      };
+
+      const SUB_BOT_COLL_CODE_OPTIONS_BY_COLL_TYPE = {
+        "1": SUB_BOT_COLL_CODE_OPTIONS_LAND,
+        "3": SUB_BOT_COLL_CODE_OPTIONS_MACH
+      };
+
+      const BOT_COLL_CODE_OPTIONS_BY_COLL_TYPE = {
+        "1": BOT_COLL_CODE_OPTIONS_LAND,
+        "4": BOT_COLL_CODE_OPTIONS_4,
+        "5": BOT_COLL_CODE_OPTIONS_5,
+        "8": BOT_COLL_CODE_OPTIONS_8,
+        "99": BOT_COLL_CODE_OPTIONS_99,
+      };
+
+      // Helpers
+      const randomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+      const randomElem = (arr) => arr[Math.floor(Math.random() * arr.length)];
+      
+      const generateCitizenId = () => {
+        let id = "";
+        let sum = 0;
+        for (let i = 0; i < 12; i++) {
+          let digit = i === 0 ? randomInt(1, 8) : randomInt(0, 9);
+          id += digit;
+          sum += digit * (13 - i);
+        }
+        let checkDigit = (11 - (sum % 11)) % 10;
+        return id + checkDigit;
+      };
+      
+      const generateTaxId = () => generateCitizenId();
+      
+      const generateDate = (startYear, endYear) => {
+        const y = randomInt(startYear, endYear);
+        const m = String(randomInt(1, 12)).padStart(2, "0");
+        const d = String(randomInt(1, 28)).padStart(2, "0");
+        return `${y}-${m}-${d}`;
+      };
+
+      const formatGeoCode = (value, width) => {
+        const text = String(value ?? "");
+        if (!text) return "";
+
+        return text.length < width ? text.padStart(width, "0") : text;
+      };
+
+      // Current date in YYYY-MM-DD, with optional year offset (e.g. +1, -2)
+      const now = (yearOffset = 0) => {
+        const date = new Date();
+        const offset = Number(yearOffset) || 0;
+        date.setFullYear(date.getFullYear() + offset);
+
+        const y = date.getFullYear();
+        const m = String(date.getMonth() + 1).padStart(2, "0");
+        const d = String(date.getDate()).padStart(2, "0");
+        return `${y}-${m}-${d}`;
+      };
+
+      const currentYear = (yearOffset = 0) => {
+        const date = new Date();
+        const offset = Number(yearOffset) || 0;
+        date.setFullYear(date.getFullYear() + offset);
+        return date.getFullYear();
+      };
+
+      const getSelectedCollateralType = () => {
+        const select = document.getElementById("cfg-coll-type");
+        if (!select) return "1";
+
+        const rawValue = String(select.value || "");
+        const match = rawValue.match(/^\d+/) || select.selectedOptions?.[0]?.textContent?.match(/^\d+/);
+        return match ? match[0] : rawValue || "1";
+      };
+
+      const getCollateralTypePreset = (collType) => {
+        return (
+          COLLATERAL_TYPE_PAYLOAD_PRESETS[collType] || {
+            coll_subtype: "",
+            bot_coll_code: "",
+            fieldOverrides: {},
+          }
+        );
+      };
+
+      const initSelectOptions = (selectId, options) => {
+        const select = document.getElementById(selectId);
+        if (!select) return;
+
+        select.innerHTML = "";
+        options.forEach((item) => {
+          const option = document.createElement("option");
+          option.value = item.value;
+          option.textContent = item.description === item.value
+            ? item.description
+            : `${item.value} - ${item.description}`;
+          select.appendChild(option);
+        });
+      };
+
+      const getCollSubtypeOptionsByType = (collType) => {
+        return COLL_SUBTYPE_OPTIONS_BY_COLL_TYPE[collType] || COLL_SUBTYPE_OPTIONS_DEFAULT;
+      };
+
+      const getSubBotCollCodeOptionsByType = (collType) => {
+        return SUB_BOT_COLL_CODE_OPTIONS_BY_COLL_TYPE[collType] || [];
+      };
+
+      const getLandDocSubtypeOptionsByType = (collType) => {
+        return LAND_DOC_SUBTYPE_OPTIONS_BY_COLL_TYPE[collType] || [];
+      };
+
+      const getBotCollCodeOptionsByType = (collType) => {
+        return BOT_COLL_CODE_OPTIONS_BY_COLL_TYPE[collType] || [];
+      };
+
+      const getBuildSubBotOptionsByBotCode = (botCode) => {
+        return BUILD_SUB_BOT_COLL_CODE_OPTIONS_BY_BOT_CODE[botCode] || [];
+      };
+
+      const getConfiguredMoneyValue = (inputId, fallbackValue) => {
+        const input = document.getElementById(inputId);
+        if (!input) return `${fallbackValue}`;
+
+        const value = input.value;
+        return value === "" ? `${fallbackValue}` : value;
+      };
+
+      const getCloseMoneyValue = (baseValue, variancePercent = 5) => {
+        const numericBase = Number(baseValue);
+        if (!Number.isFinite(numericBase) || numericBase <= 0) {
+          return `${randomInt(2, 50) * 100000}`;
+        }
+
+        const variance = Math.max(1, Math.round(numericBase * (variancePercent / 100)));
+        const min = Math.max(1, numericBase - variance);
+        const max = numericBase + variance;
+        return `${randomInt(min, max)}`;
+      };
+
+      const getConfiguredTextValue = (inputId, fallbackValue) => {
+        const input = document.getElementById(inputId);
+        if (!input) return `${fallbackValue}`;
+
+        const value = input.value;
+        return value === "" ? `${fallbackValue}` : value;
+      };
+
+      const updateBuildSubBotOptions = () => {
+        const buildBotCodeSelect = document.getElementById("cfg-build-bot-coll-code");
+        const buildSubBotCodeSelect = document.getElementById("cfg-build-sub-bot-coll-code");
+
+        if (!buildBotCodeSelect || !buildSubBotCodeSelect) return;
+
+        const options = getBuildSubBotOptionsByBotCode(buildBotCodeSelect.value);
+        initSelectOptions("cfg-build-sub-bot-coll-code", options);
+        buildSubBotCodeSelect.disabled = !options.length;
+        buildSubBotCodeSelect.value = options.length ? options[0].value : "";
+      };
+
+      const getConfiguredCustomerGrade = () => {
+        const select = document.getElementById('cfg-customer-grade');
+        const options = ["B","A","AA","AAA","AAA+"]; 
+        if (!select) return randomElem(options);
+        const v = select.value;
+        return v === "" ? randomElem(options) : v;
+      };
+
+      const toggleBuildAppraisalField = () => {
+        const buildTypePanel = document.getElementById("config-build-type-panel");
+        const buildBotCodePanel = document.getElementById("config-build-bot-code-panel");
+        const buildAppraisalPanel = document.getElementById("config-build-appraisal-panel");
+
+        if (!buildTypePanel || !buildAppraisalPanel || !buildBotCodePanel) return;
+
+        const shouldShow = !buildTypePanel.classList.contains("hidden");
+        if (shouldShow) {
+          const buildBotCodeInput = document.getElementById("cfg-build-bot-coll-code");
+          if (buildBotCodeInput && !buildBotCodeInput.options.length) {
+            initSelectOptions('cfg-build-bot-coll-code', BOT_COLL_CODE_OPTIONS_BUILD);
+          }
+          if (buildBotCodeInput && !buildBotCodeInput.value) buildBotCodeInput.value = "286004";
+          updateBuildSubBotOptions();
+        }
+
+        buildBotCodePanel.classList.toggle("hidden", !shouldShow);
+        buildAppraisalPanel.classList.toggle("hidden", !shouldShow);
+      };
+
+      const toggleMachineFields = () => {
+        const machineBotCodePanel = document.getElementById("config-machine-bot-code-panel");
+        const machineAppraisalPanel = document.getElementById("config-machine-appraisal-panel");
+
+        if (!machineBotCodePanel || !machineAppraisalPanel) return;
+
+        const shouldShow = getSelectedCollateralType() === "3";
+        machineBotCodePanel.classList.toggle("hidden", !shouldShow);
+        machineAppraisalPanel.classList.toggle("hidden", !shouldShow);
+
+        if (shouldShow) {
+          const machineBotCodeInput = document.getElementById("cfg-machine-bot-coll-code");
+          if (machineBotCodeInput && !machineBotCodeInput.options.length) {
+            initSelectOptions('cfg-machine-bot-coll-code', BOT_COLL_CODE_OPTIONS_MACH);
+          }
+          if (machineBotCodeInput && !machineBotCodeInput.value) {
+            machineBotCodeInput.value = "286011";
+          }
+        }
+      };
+
+      const toggleOtherBotFields = () => {
+        const otherBotCodePanel = document.getElementById("config-other-bot-code-panel");
+        if (!otherBotCodePanel) return;
+
+        const otherTypes = new Set(["4", "5", "13", "14"]);
+        const shouldShow = otherTypes.has(getSelectedCollateralType());
+        otherBotCodePanel.classList.toggle("hidden", !shouldShow);
+
+        if (shouldShow) {
+          const otherBotCodeInput = document.getElementById("cfg-other-bot-coll-code");
+          if (otherBotCodeInput) {
+            const preset = getCollateralTypePreset(getSelectedCollateralType());
+            const otherOptions = getBotCollCodeOptionsByType(getSelectedCollateralType());
+            // type 4 gets a real dropdown; other types keep the preset single option
+            initSelectOptions(
+              'cfg-other-bot-coll-code',
+              otherOptions.length
+                ? otherOptions
+                : [{ value: preset.bot_coll_code || '', description: preset.bot_coll_code || '' }]
+            );
+            otherBotCodeInput.disabled = false;
+            otherBotCodeInput.value = otherOptions.length
+              ? (otherOptions.some((opt) => opt.value === preset.bot_coll_code) ? preset.bot_coll_code : otherOptions[0].value)
+              : (preset.bot_coll_code || '');
+          }
+        }
+      };
+
+      const toggleType4Fields = () => {
+        const type4Panel = document.getElementById("config-type4-panel");
+        if (!type4Panel) return;
+
+        const shouldShow = getSelectedCollateralType() === "4";
+        type4Panel.classList.toggle("hidden", !shouldShow);
+      };
+
+      const toggleType13Fields = () => {
+        const type13Panel = document.getElementById("config-type13-aprs-panel");
+        if (!type13Panel) return;
+
+        const shouldShow = getSelectedCollateralType() === "13";
+        type13Panel.classList.toggle("hidden", !shouldShow);
+      };
+
+      const toggleType14Fields = () => {
+        const type14Panel = document.getElementById("config-type14-aprs-panel");
+        if (!type14Panel) return;
+
+        const shouldShow = getSelectedCollateralType() === "14";
+        type14Panel.classList.toggle("hidden", !shouldShow);
+      };
+
+      const toggleType7Fields = () => {
+        const type7Panel = document.getElementById("config-type7-panel");
+        if (!type7Panel) return;
+
+        const shouldShow = getSelectedCollateralType() === "7";
+        type7Panel.classList.toggle("hidden", !shouldShow);
+      };
+
+      const toggleType14SalakPanel = () => {
+        const panel = document.getElementById('config-type14-salak-panel');
+        if (!panel) return;
+        panel.classList.toggle('hidden', getSelectedCollateralType() !== '14');
+      };
+
+      const toggleType17Fields = () => {
+        const type17Panel = document.getElementById("config-land-doc-subtype-panel");
+        const landDocSubtypeSelect = document.getElementById("cfg-land-doc-subtype");
+
+        if (!type17Panel || !landDocSubtypeSelect) return;
+
+        const shouldShow = getSelectedCollateralType() === "17";
+        type17Panel.classList.toggle("hidden", !shouldShow);
+
+        if (shouldShow) {
+          landDocSubtypeSelect.disabled = false;
+          initSelectOptions("cfg-land-doc-subtype", getLandDocSubtypeOptionsByType("17"));
+          landDocSubtypeSelect.value = landDocSubtypeSelect.options.length
+            ? landDocSubtypeSelect.options[0].value
+            : "";
+        } else {
+          landDocSubtypeSelect.innerHTML = "";
+          landDocSubtypeSelect.value = "";
+          landDocSubtypeSelect.disabled = true;
+        }
+      };
+
+      const toggleType99Fields = () => {
+        const type99Panel = document.getElementById("config-type99-product-panel");
+        const type99Select = document.getElementById("cfg-type-of-commudity");
+        const type99AprsPanel = document.getElementById("config-type99-aprs-panel");
+
+        if (!type99Panel || !type99Select || !type99AprsPanel) return;
+
+        const shouldShow = getSelectedCollateralType() === "99";
+        type99Panel.classList.toggle("hidden", !shouldShow);
+        type99AprsPanel.classList.toggle("hidden", !shouldShow);
+
+        if (shouldShow) {
+          if (!type99Select.options.length) {
+            initSelectOptions("cfg-type-of-commudity", TYPE_OF_COMMUDITY_OPTIONS_99);
+          }
+          type99Select.disabled = false;
+          type99Select.value = type99Select.options.length ? type99Select.options[0].value : "";
+        } else {
+          type99Select.innerHTML = "";
+          type99Select.value = "";
+          type99Select.disabled = true;
+        }
+        // ensure product panel visibility respects selected BOT code (e.g., ship -> hide)
+        updateType99ProductVisibility();
+      };
+
+      const updateType99ProductVisibility = () => {
+        const botSelect = document.getElementById('cfg-bot-coll-code');
+        const type99Panel = document.getElementById('config-type99-product-panel');
+        const type99Select = document.getElementById('cfg-type-of-commudity');
+        const type99AprsPanel = document.getElementById('config-type99-aprs-panel');
+        if (!type99Panel || !type99Select || !type99AprsPanel || !botSelect) return;
+        // Only show product panel when collateral type is 99
+        const collType = getSelectedCollateralType();
+        if (collType !== "99") {
+          type99Panel.classList.add('hidden');
+          type99AprsPanel.classList.add('hidden');
+          type99Select.innerHTML = '';
+          type99Select.value = '';
+          type99Select.disabled = true;
+          return;
+        }
+
+        // If BOT code is 286039 (เรือสินค้า) then hide/clear the product select but show appraisal input
+        if (botSelect.value === '286039') {
+          type99Panel.classList.add('hidden');
+          // show appraisal panel so user can input appraisal value for ships
+          type99AprsPanel.classList.remove('hidden');
+          type99Select.innerHTML = '';
+          type99Select.value = '';
+          type99Select.disabled = true;
+        } else {
+          // For other BOT codes (e.g. สินค้าคงคลัง) show product panel and init if needed
+          if (!type99Select.options.length) initSelectOptions('cfg-type-of-commudity', TYPE_OF_COMMUDITY_OPTIONS_99);
+          type99Panel.classList.remove('hidden');
+          type99AprsPanel.classList.remove('hidden');
+          type99Select.disabled = false;
+          type99Select.value = type99Select.value || (type99Select.options[0]?.value || '');
+        }
+      };
+
+      const toggleRoomFields = () => {
+        const roomAreaPanel = document.getElementById("config-room-area-panel");
+        const roomAprsPanel = document.getElementById("config-room-aprs-panel");
+
+        [roomAreaPanel, roomAprsPanel].forEach((panel) => {
+          if (!panel) return;
+          panel.classList.toggle("hidden", getSelectedCollateralType() !== "8");
+        });
+      };
+
+      const toggleLandPriceFields = () => {
+        const landPricePanel = document.getElementById("config-land-price-panel");
+        const buildPriceGroup = document.getElementById("config-build-price-group");
+        const botCollCodeSelect = document.getElementById("cfg-bot-coll-code");
+        const buildTypePanel = document.getElementById("config-build-type-panel");
+        const buildTypeSelect = document.getElementById("cfg-build-type");
+        const buildBotCodePanel = document.getElementById("config-build-bot-code-panel");
+        const buildAppraisalPanel = document.getElementById("config-build-appraisal-panel");
+
+        if (!landPricePanel || !buildPriceGroup || !botCollCodeSelect) return;
+
+        const shouldShow = botCollCodeSelect.value === "286003" || botCollCodeSelect.value === "286006";
+        const shouldShowBuild = botCollCodeSelect.value === "286006";
+        const isLandCollateralWithBuild = getSelectedCollateralType() === "1" && shouldShowBuild;
+
+        landPricePanel.classList.toggle("hidden", !shouldShow);
+        buildPriceGroup.classList.toggle("hidden", !shouldShowBuild);
+
+        if (buildTypePanel && buildTypeSelect && buildBotCodePanel && buildAppraisalPanel) {
+          if (isLandCollateralWithBuild) {
+            if (!buildTypeSelect.options.length) {
+              initSelectOptions("cfg-build-type", BUILD_TYPE_OPTIONS_STRUCTURE);
+            }
+            buildTypePanel.classList.remove("hidden");
+            buildTypeSelect.disabled = false;
+            buildTypeSelect.value = buildTypeSelect.options.length
+              ? buildTypeSelect.value || buildTypeSelect.options[0].value
+              : "";
+            buildBotCodePanel.classList.add("hidden");
+            buildAppraisalPanel.classList.add("hidden");
+          } else if (getSelectedCollateralType() === "1") {
+            buildTypePanel.classList.add("hidden");
+            buildTypeSelect.disabled = true;
+            buildTypeSelect.innerHTML = "";
+            buildTypeSelect.value = "";
+            buildBotCodePanel.classList.add("hidden");
+            buildAppraisalPanel.classList.add("hidden");
+          }
+        }
+      };
+
+      const getSelectedBuildType = () => {
+        const select = document.getElementById("cfg-build-type");
+        return select ? select.value : "";
+      };
+
+      const resolveBuildTypeValue = () => {
+        const selectedBuildType = getSelectedBuildType();
+        if (selectedBuildType === "8") {
+          return randomElem(BUILD_TYPE_RANDOM_WHEN_OTHER);
+        }
+        return selectedBuildType;
+      };
+
+      const getSelectedBondExpireRange = () => {
+        const select = document.getElementById("cfg-bond-expire-range");
+        return select ? select.value : "";
+      };
+
+      const getConfiguredCustomerType = () => {
+        // Allow personal, corporate, and registration APIs to pick the configured value
+        if (!(currentApi === "personalCustomer" || currentApi === "corporateCustomer" || currentApi === "customerRegistration")) {
+          return `${randomInt(20000, 99999)}`;
+        }
+
+        const input = document.getElementById("cfg-customer-type");
+        const value = input ? input.value.trim() : "";
+        return value || `${randomInt(20000, 99999)}`;
+      };
+
+      const getConfiguredBranchCode = () => {
+        const input = document.getElementById("cfg-branch-code");
+        if (!input) return "611";
+        const value = input.value.trim();
+        return value || "611";
+      };
+
+      const getConfiguredRegisteredDate = () => {
+        // Allow both personal and corporate APIs to pick the configured registered date
+        if (!(currentApi === "personalCustomer" || currentApi === "corporateCustomer")) {
+          return now();
+        }
+
+        const input = document.getElementById("cfg-registered-date");
+        const value = input ? input.value.trim() : "";
+        return value || now();
+      };
+
+      const resolveBondExpireDate = () => {
+        const selectedRange = getSelectedBondExpireRange();
+        const [minText, maxText] = selectedRange.split("-");
+        const min = Number(minText);
+        const max = Number(maxText == "999" ? "30" : maxText);
+
+        if (!Number.isFinite(min) || !Number.isFinite(max) || min > max) {
+          return now();
+        }
+
+        const randomYearOffset = randomInt(min, max);
+        return now(randomYearOffset);
+      };
+
+      const toggleCollateralSubtypeFields = (collType) => {
+        const collSubtypeSelect = document.getElementById("cfg-coll-subtype");
+        const botCollCodePanel = document.getElementById("config-bot-coll-code-panel");
+        const botCollCodeSelect = document.getElementById("cfg-bot-coll-code");
+        const landPricePanel = document.getElementById("config-land-price-panel");
+        const buildPriceGroup = document.getElementById("config-build-price-group");
+        const machineBotCodePanel = document.getElementById("config-machine-bot-code-panel");
+        const machineAppraisalPanel = document.getElementById("config-machine-appraisal-panel");
+        const subBotCollSelect = document.getElementById("cfg-sub-bot-coll-code");
+        const subBotCollGroup = subBotCollSelect?.parentElement;
+        const otherSubBotInput = document.getElementById('cfg-other-sub-bot-coll-code');
+        const otherSubBotGroup = otherSubBotInput?.parentElement;
+        const buildTypePanel = document.getElementById("config-build-type-panel");
+        const buildTypeSelect = document.getElementById("cfg-build-type");
+        const bondExpirePanel = document.getElementById("config-bond-expire-panel");
+        const bondExpireSelect = document.getElementById("cfg-bond-expire-range");
+        const collTypePreset = getCollateralTypePreset(collType);
+        const collSubtypeOptions = getCollSubtypeOptionsByType(collType);
+        const botCollCodeOptions = getBotCollCodeOptionsByType(collType);
+        const subBotOptions = getSubBotCollCodeOptionsByType(collType);
+        
+        if (collSubtypeSelect) {
+          initSelectOptions("cfg-coll-subtype", collSubtypeOptions);
+          const isDefaultOptionSet = collSubtypeOptions === COLL_SUBTYPE_OPTIONS_DEFAULT;
+          const isEnabled = collSubtypeOptions.length > 0 && !isDefaultOptionSet;
+          collSubtypeSelect.disabled = !isEnabled;
+
+          if (isDefaultOptionSet) {
+            const firstDefaultValue = collSubtypeSelect.options.length
+              ? collSubtypeSelect.options[0].value
+              : "";
+            collSubtypeSelect.value = firstDefaultValue;
+          } else if (!isEnabled) {
+            collSubtypeSelect.value = "";
+          } else {
+            // Default from preset when enabled and option exists.
+            const hasPresetOption = Array.from(collSubtypeSelect.options).some(
+              (opt) => opt.value === collTypePreset.coll_subtype
+            );
+            collSubtypeSelect.value = hasPresetOption ? collTypePreset.coll_subtype : "";
+          }
+        }
+
+        if (botCollCodePanel && botCollCodeSelect) {
+          // show BOT code select for types that need direct BOT code selection
+          if (collType === "1" || collType === "8" || collType === "99" || collType === "17") {
+            // If there are specific BOT code options for this type use them, otherwise fall back to preset single option
+            const optionsToInit = botCollCodeOptions && botCollCodeOptions.length ? botCollCodeOptions : [{ value: collTypePreset.bot_coll_code || '', description: collTypePreset.bot_coll_code || '' }];
+            initSelectOptions("cfg-bot-coll-code", optionsToInit);
+            botCollCodePanel.classList.remove("hidden");
+            botCollCodeSelect.disabled = false;
+            const hasPresetOption = Array.from(botCollCodeSelect.options).some(
+              (opt) => opt.value === collTypePreset.bot_coll_code
+            );
+            botCollCodeSelect.value = hasPresetOption ? collTypePreset.bot_coll_code : botCollCodeSelect.options[0]?.value || "";
+            // ensure land price and type99 product visibility update
+            toggleLandPriceFields();
+            // when bot code changes, update type99 product visibility and regenerate
+            botCollCodeSelect.onchange = () => { updateType99ProductVisibility(); generateData(); toggleLandPriceFields(); };
+            // also run once to set initial state
+            updateType99ProductVisibility();
+          } else {
+            botCollCodePanel.classList.add("hidden");
+            botCollCodeSelect.disabled = true;
+            botCollCodeSelect.innerHTML = "";
+            botCollCodeSelect.value = "";
+
+            if (landPricePanel && buildPriceGroup) {
+              landPricePanel.classList.add("hidden");
+              buildPriceGroup.classList.add("hidden");
+            }
+          }
+        }
+        
+        if (subBotCollSelect) {
+          // For coll_type 17 and 14 we want no sub-bot dropdown and default value should be empty string
+          if (collType === "17" || collType === "14") {
+            subBotCollSelect.innerHTML = "";
+            subBotCollSelect.value = "";
+            subBotCollSelect.disabled = true;
+            if (subBotCollGroup) subBotCollGroup.classList.add("hidden");
+            if (otherSubBotInput) {
+              otherSubBotInput.value = "";
+              otherSubBotInput.disabled = true;
+              if (otherSubBotGroup) otherSubBotGroup.classList.add("hidden");
+            }
+          } else {
+            initSelectOptions("cfg-sub-bot-coll-code", subBotOptions);
+            const isEnabled = subBotOptions.length > 0;
+            subBotCollSelect.disabled = !isEnabled;
+            if (subBotCollGroup) {
+              subBotCollGroup.classList.toggle("hidden", !isEnabled);
+            }
+            // also ensure other-sub-bot is visible when appropriate
+            if (otherSubBotInput && otherSubBotGroup) {
+              otherSubBotGroup.classList.toggle('hidden', false);
+              otherSubBotInput.disabled = false;
+            }
+            if (!isEnabled) {
+              // Requirement: disabled state must be empty string in JSON.
+              subBotCollSelect.value = "";
+            } else {
+              // Default to the first available option from configured source.
+              const firstOptionValue = subBotCollSelect.options.length
+                ? subBotCollSelect.options[0].value
+                : "";
+              subBotCollSelect.value = firstOptionValue;
+            }
+          }
+        }
+
+        if (buildTypePanel && buildTypeSelect) {
+          const shouldShowBuildType = collType === "2";
+          if (shouldShowBuildType) {
+            initSelectOptions("cfg-build-type", BUILD_TYPE_OPTIONS_STRUCTURE);
+            buildTypePanel.classList.remove("hidden");
+            buildTypeSelect.disabled = false;
+            buildTypeSelect.value = buildTypeSelect.options.length
+              ? buildTypeSelect.options[0].value
+              : "";
+            toggleBuildAppraisalField();
+          } else {
+            buildTypePanel.classList.add("hidden");
+            buildTypeSelect.disabled = true;
+            buildTypeSelect.innerHTML = "";
+            buildTypeSelect.value = "";
+            const buildAppraisalPanel = document.getElementById("config-build-appraisal-panel");
+            if (buildAppraisalPanel) {
+              buildAppraisalPanel.classList.add("hidden");
+            }
+          }
+        }
+
+        if (machineBotCodePanel && machineAppraisalPanel) {
+          const shouldShowMachineFields = collType === "3";
+          machineBotCodePanel.classList.toggle("hidden", !shouldShowMachineFields);
+          machineAppraisalPanel.classList.toggle("hidden", !shouldShowMachineFields);
+
+          if (shouldShowMachineFields) {
+            const machineBotCodeInput = document.getElementById("cfg-machine-bot-coll-code");
+            if (machineBotCodeInput && !machineBotCodeInput.options.length) {
+              initSelectOptions("cfg-machine-bot-coll-code", BOT_COLL_CODE_OPTIONS_MACH);
+            }
+            if (machineBotCodeInput && !machineBotCodeInput.value) {
+              machineBotCodeInput.value = "286011";
+            }
+          }
+        }
+
+        toggleOtherBotFields();
+        toggleType4Fields();
+        toggleRoomFields();
+        toggleType13Fields();
+        toggleType14Fields();
+        toggleType7Fields();
+        toggleType17Fields();
+        toggleType99Fields();
+        toggleType14SalakPanel();
+
+        if (landPricePanel && buildPriceGroup && collType === "17") {
+          landPricePanel.classList.remove("hidden");
+          buildPriceGroup.classList.remove("hidden");
+        }
+
+        if (bondExpirePanel && bondExpireSelect) {
+          const shouldShowBondExpireRange = collType === "5";
+          if (shouldShowBondExpireRange) {
+            initSelectOptions("cfg-bond-expire-range", BOND_EXPIRE_RANGE_OPTIONS);
+            bondExpirePanel.classList.remove("hidden");
+            bondExpireSelect.disabled = false;
+            bondExpireSelect.value = bondExpireSelect.options.length
+              ? bondExpireSelect.options[0].value
+              : "";
+          } else {
+            bondExpirePanel.classList.add("hidden");
+            bondExpireSelect.disabled = true;
+            bondExpireSelect.innerHTML = "";
+            bondExpireSelect.value = "";
+          }
+        }
+      };
+
+      // Address logic (pulls from Config Panel inputs if available)
+      const generateAddress = (isReg = false) => {
+        const isRandAll = document.getElementById('rand-address-toggle').checked;
+        
+        let inProv = "";
+        let inDist = "";
+        let inSubDist = "";
+        let inZip = "";
+
+        // If not full random, read from inputs
+        if (!isRandAll) {
+          inProv = document.getElementById('cfg-province').value;
+          inDist = document.getElementById('cfg-district').value;
+          inSubDist = document.getElementById('cfg-subdistrict').value;
+          inZip = document.getElementById('cfg-zipcode').value;
+        }
+
+        // Fallback to random if empty
+        const prov = formatGeoCode(inProv || randomElem(PROVINCES), 2);
+        const dist = formatGeoCode(inDist || randomElem(DISTRICTS), 2);
+        const subDist = formatGeoCode(inSubDist || randomElem(SUB_DISTRICTS), 2);
+        const zip = inZip || `${prov}${randomInt(100, 999)}`;
+
+        if (isReg) {
+          return {
+            address1: `${randomInt(1, 999)}`,
+            address2: `ซอย ${randomInt(1, 99)}`,
+            address3: "",
+            address4: "",
+            moo: `${randomInt(1, 15)}`,
+            sub_district: subDist,
+            district: dist,
+            province: prov,
+            country: "TH",
+            zip: zip,
+          };
+        }
+        return {
+          address1: `ที่อยู่ทดสอบ ${randomInt(1, 999)}`,
+          address2: `หมู่บ้าน ${randomElem(THAI_FIRST_NAMES)}`,
+          address3: `ถนน ${randomElem(THAI_LAST_NAMES)}`,
+          address4: "",
+          moo: `${randomInt(1, 15)}`,
+          country: "TH",
+          province: prov,
+          district: dist,
+          sub_district: subDist,
+          zip: zip,
+          house_hold_number: `${randomInt(1, 99)}`,
+        };
+      };
+
+      // Generation Functions
+      const generators = {
+        personalCustomer: () => ({
+          rqBody: {
+            citizen_id: generateCitizenId(),
+            customer_title: "นาย",
+            customer_first_name: randomElem(THAI_FIRST_NAMES),
+            customer_middle_name: "",
+            customer_last_name: randomElem(THAI_LAST_NAMES),
+            english_customer_title: "MR.",
+            english_first_name: randomElem(EN_FIRST_NAMES),
+            english_middle_name: "",
+            english_last_name: randomElem(EN_LAST_NAMES),
+            permanent_address: generateAddress(),
+            mailing_address: generateAddress(),
+            office_address: generateAddress(),
+            date_of_birth: generateDate(1960, 2000),
+            date_of_birth_code: "1",
+            date_of_death: "",
+            number_of_dependents: `${randomInt(0, 5)}`,
+            spouse_citizen_id: "",
+            spouse_title: "",
+            spouse_name: "",
+            spouse_last_name: "",
+            religion: "1",
+            sex: randomElem(["M", "F"]),
+            income: "4",
+            marital: "S",
+            education: "9",
+            occupation: "01",
+            sub_occupation: "04",
+            ministry_code1: "90000",
+            ministry_code2: "99000",
+            ministry_code3: "99999",
+            nationality: "TH",
+            residency: "TH",
+            home_phone: `02${randomInt(1000000, 9999999)}`,
+            home_phone_ext: "",
+            mobile_phone: `08${randomInt(10000000, 99999999)}`,
+            office_phone: `02${randomInt(1000000, 9999999)}`,
+            office_phone_ext: "",
+            fax_phone: "",
+            email: `tester${randomInt(1, 999)}@gmail.com`,
+            customer: getConfiguredCustomerType(),
+            employee_id: "",
+            citizen_card: {
+              issue_center: "พระนคร",
+              issue_date: generateDate(2015, 2022),
+              expire_date: generateDate(2025, 2032),
+            },
+            risk_rating: "2",
+            branch_code: getConfiguredBranchCode(),
+            user_id: "1",
+          },
+        }),
+
+        corporateCustomer: () => ({
+          rqBody: {
+            customer: getConfiguredCustomerType(),
+            registered_date: getConfiguredRegisteredDate(),
+            customer_title: "สหกรณ์",
+            customer_name: randomElem(CORP_TH_NAMES),
+            english_customer_title: "Group",
+            english_customer_name: randomElem(CORP_EN_NAMES),
+            permanent_address: generateAddress(),
+            mailing_address: generateAddress(),
+            office_address: generateAddress(),
+            business_info: {
+              establish_objective: "ทดสอบระบบ",
+              nationality: "TH",
+              residency: "TH",
+              total_assets: `${randomInt(1, 50)}000000.00`,
+              liability: "0.00",
+              expense: `${randomInt(1, 10)}000000.00`,
+              net_profit: `${randomInt(1, 10)}000000.00`,
+              cash_flow: `${randomInt(1, 10)}000000.00`,
+              capital: `${randomInt(5, 20)}000000.00`,
+              registered_capital: `${randomInt(10, 30)}000000.00`,
+              paidup_capital: "200000.00",
+              annual_sales: `${randomInt(10, 50)}000000.00`,
+              net_worth: "15000000.00",
+              last_financial_update: generateDate(2020, 2023),
+              risk_rating: "1",
+              credit_line: "444000000.00",
+              ISIC_section: "A01",
+              ISIC_group: "010",
+              ISIC_specific_code: "0100",
+            },
+            contact_info: {
+              office_phone: `02${randomInt(1000000, 9999999)}`,
+              office_phone_ext: "111",
+              factory_phone: `02${randomInt(1000000, 9999999)}`,
+              factory_phone_ext: "222",
+              mobile_phone: `08${randomInt(10000000, 99999999)}`,
+              fax_phone: `02${randomInt(1000000, 9999999)}`,
+              email: `corp${randomInt(1, 999)}@gmail.com`,
+            },
+            BOT_info: {
+              tax_id: generateTaxId(),
+              bot_assigned_code: "456",
+              boi_flag: "false",
+              juristic_id: generateTaxId(),
+              juristic_registered_date: generateDate(2010, 2020),
+              swift_code: "55555",
+              government_document_number: "66666",
+              fi_code: "001",
+              fi_assigned_code: "002",
+              inter_org_oversea_gov_id: "003",
+              oversea_juristic_id: "004",
+              other_juristic_id: "005",
+            },
+            other_card_info: {
+              other_id_type: "3",
+              other_id_number: `3A-${randomInt(10000, 99999)}`,
+              issue_center: "บางแค",
+              issue_date: generateDate(2015, 2018),
+              expire_date: generateDate(2024, 2028),
+            },
+            customer_group_info: {
+              customer_group_flag: "true",
+              group_type_code: "1",
+              group_activity_code: "2",
+              group_product_name: "Test",
+              group_common_occupation: "7",
+              group_establish_date: generateDate(2015, 2020),
+              group_establish_member: "10",
+              group_current_member: "100",
+              group_objective: "ทดสอบ 111",
+            },
+            branch_code: getConfiguredBranchCode(),
+            user_id: "1",
+          },
+        }),
+
+        customerRegistration: () => ({
+          rqBody: {
+            customer_id: getConfiguredCustomerType(),
+            branch_of_ownership: getConfiguredBranchCode(),
+            group_code: "",
+            loan_region: getConfiguredBranchCode(),
+            customer_status: "0",
+            customer_grade: getConfiguredCustomerGrade(),
+            registered_date: getConfiguredRegisteredDate(),
+            customer_address: generateAddress(true),
+            bank_district_code: "1423",
+            old_group_code: getConfiguredBranchCode(),
+            registered_status: "00",
+            updated_user_id: "1",
+            subsidy: {
+              subsidy_plan: "",
+              maximum_subsidy_amount: "",
+              available_subsidy_amount: "",
+              subsidy_customer_status: "",
+              subsidy_customer_unaccrue_flag: "false",
+              subsidy_customer_type: "",
+            },
+            rehabilitation_customer: {
+              rehabilitation_customer_flag: "false",
+              rehabilitation_round: "",
+              rehabilitation_date: "",
+            },
+            branch_code: getConfiguredBranchCode(),
+            user_id: "1",
+          },
+        }),
+
+        collateralCreater: (forcedCollType) => {
+          // Can utilize Province/District inputs for collateral if we want
+          const isRandAll = document.getElementById('rand-address-toggle').checked;
+            let inProv = isRandAll ? "" : document.getElementById('cfg-province').value;
+            let inDist = isRandAll ? "" : document.getElementById('cfg-district').value;
+            let inSubDist = isRandAll ? "" : document.getElementById('cfg-subdistrict').value;
+
+          const selectedCollType = String(forcedCollType || getSelectedCollateralType());
+          const collTypePreset = getCollateralTypePreset(selectedCollType);
+          
+          // Read from select inputs
+          const selectedBotCollCode = document.getElementById('cfg-bot-coll-code')?.value || "";
+          const selectedMachineBotCollCode = document.getElementById('cfg-machine-bot-coll-code')?.value || "";
+          const selectedOtherBotCollCode = document.getElementById('cfg-other-bot-coll-code')?.value || "";
+          const selectedOtherSubBotCollCode = document.getElementById('cfg-other-sub-bot-coll-code')?.value || "";
+          const selectedType4AccountNo = document.getElementById('cfg-type4-account-no')?.value || "";
+          const configuredType4AprsValue = getConfiguredMoneyValue("cfg-type4-aprs-value", randomInt(2, 50) * 1000000);
+          const configuredRoomArea = getConfiguredMoneyValue("cfg-room-area", 1600);
+          const configuredRoomAprsValue = getConfiguredMoneyValue("cfg-room-aprs-value", 2000000);
+          const configuredType13AprsValue = getConfiguredMoneyValue("cfg-type13-aprs-value", 2000000);
+          const configuredType14AprsValue = getConfiguredMoneyValue("cfg-type14-aprs-value", 2000000);
+          const configuredType7GuarantorCifNo = getConfiguredTextValue("cfg-type7-guarantor-cif-no", "");
+          const configuredType7BotCollCode = getConfiguredTextValue("cfg-type7-bot-coll-code", "286071");
+          const configuredType7SubBotCollCode = getConfiguredTextValue("cfg-type7-sub-bot-coll-code", "0");
+          const configuredType99AprsValue = getConfiguredMoneyValue("cfg-type99-aprs-value", 2000000);
+          const selectedLandDocSubtype = document.getElementById('cfg-land-doc-subtype')?.value || "";
+          const selectedTypeOfCommudity = document.getElementById('cfg-type-of-commudity')?.value || "";
+          const selectedCollSubtype = document.getElementById('cfg-coll-subtype')?.value || "";
+          const selectedSubBotCollCode = document.getElementById('cfg-sub-bot-coll-code')?.value || "";
+          const configuredType14SalakAccount = document.getElementById('cfg-type14-salak-account')?.value || "";
+          const configuredLandValue = getConfiguredMoneyValue("cfg-land-value", randomInt(2, 50) * 1000000);
+          const configuredBuildValue = getConfiguredMoneyValue("cfg-build-value", randomInt(2, 50) * 100000);
+          const configuredBuildBotCollCode = getConfiguredTextValue("cfg-build-bot-coll-code", "286004");
+          const configuredBuildSubBotCollCode = document.getElementById('cfg-build-sub-bot-coll-code')?.value || "";
+          const configuredBuildAppraisalValue = getConfiguredMoneyValue("cfg-build-appraisal-value", randomInt(2, 50) * 100000);
+          const configuredMachineAppraisalValue = getConfiguredMoneyValue("cfg-machine-appraisal-value", randomInt(2, 50) * 100000);
+          const selectedBondStartNumber = document.getElementById('cfg-bond-start-number')?.value || "";
+          const selectedBondEndNumber = document.getElementById('cfg-bond-end-number')?.value || "";
+          const selectedBondSequence = document.getElementById('cfg-bond-sequence')?.value || "1";
+          const selectedBondUnitPrice = document.getElementById('cfg-bond-unit-price')?.value || "";
+          const selectedStockMarketPrice = document.getElementById('cfg-stock-market-price')?.value || "";
+          const collateralDescription =
+            selectedCollType === "99"
+              ? (selectedBotCollCode === "286039"
+                ? "เรือประมง"
+                : selectedBotCollCode === "286014"
+                  ? "สินค้าคงคลัง"
+                  : "")
+              : "";
+
+          const prov = formatGeoCode(inProv || "041", 3);
+          const dist = formatGeoCode(inDist || "001", 3);
+          const subDist = formatGeoCode(inSubDist || "001", 3);
+          const branch = getConfiguredBranchCode();
+
+          const basePayload = {
+            coll_type: selectedCollType,
+            collateral_description: collateralDescription,
+            coll_subtype: selectedCollSubtype || collTypePreset.coll_subtype,
+            bot_coll_code:
+              selectedCollType === "2"
+                ? configuredBuildBotCollCode
+                : selectedCollType === "3"
+                  ? (selectedMachineBotCollCode || collTypePreset.bot_coll_code)
+                  : selectedCollType === "17"
+                    ? (selectedBotCollCode || collTypePreset.bot_coll_code)
+                    : selectedCollType === "99"
+                      ? (selectedBotCollCode || collTypePreset.bot_coll_code)
+                    : ["4", "5", "13", "14"].includes(selectedCollType)
+                        ? (selectedOtherBotCollCode || collTypePreset.bot_coll_code)
+                        : (selectedBotCollCode || collTypePreset.bot_coll_code),
+            sub_bot_coll_code:
+              selectedCollType === "2"
+                ? configuredBuildSubBotCollCode
+                : selectedCollType === "3"
+                  ? (selectedSubBotCollCode || "")
+                  : selectedCollType === "14"
+                    ? "0"
+                    : ["4", "5", "13", "17"].includes(selectedCollType)
+                      ? ((selectedOtherSubBotCollCode && selectedOtherSubBotCollCode !== "0") ? selectedOtherSubBotCollCode : (selectedCollType === "17" ? "" : "0"))
+                      : (selectedSubBotCollCode || ""),
+            remarks: "Create_PHOENIX",
+            aprs_date: now(),
+            aprs_value: "",
+            aprs_by: "1",
+            aprs_tax_id: "",
+            aprs_boo: branch,
+            province: prov,
+            district: dist,
+            sub_district: subDist,
+            road: "",
+            build_code: "",
+            buid_soi: "",
+            land_info: "",
+            coll_branch: branch,
+            aprs_value_reason: "",
+            land_no: "",
+            coll_cost_center: `200${branch}`,
+            coll_response_unit: `200${branch}`,
+            land_volume_1: "",
+            land_volume_2: "",
+            land_volume_3: "",
+            land_volume_4: "",
+            ravang: "",
+            land_value: "",
+            build_value: "",
+            partial_pledge_flag: "",
+            owner_portion: "",
+            total_portion: "",
+            own_land_volume_1: "",
+            own_land_volume_2: "",
+            own_land_volume_3: "",
+            guarantor_cif_no: "",
+            build_type: "",
+            number_of_floors: "",
+            machine_reg_code_start: "",
+            machine_reg_code_end: "",
+            engine_capacity: "",
+            unit_of_engine_capacity: "",
+            purchase_price: "",
+            market_value_flag: "",
+            used_start_date: "",
+            use_age: "",
+            ruling_cost: "",
+            useful_life: "",
+            account_no: "",
+            bond_code: "",
+            issuance_year: "",
+            bond_sequence: "",
+            bond_start_number: "",
+            bond_end_number: "",
+            bond_type: "",
+            bond_expire_date: "",
+            bond_int_rate: "",
+            bond_unit_price: "",
+            bond_owner_name: "",
+            notional_value: "",
+            total_bond_value: "",
+            seniority: "",
+            symbol: "",
+            cer_no: "",
+            stock_issue_name: "",
+            stock_short_name: "",
+            stock_type: "",
+            listed_on_stock: "",
+            tax_id: "",
+            shareholder_reg_no: "",
+            stock_holder_name: "",
+            stock_number: "",
+            stock_issue_date: "",
+            number_of_shares: "",
+            stock_par_price: "",
+            stock_par_date: "",
+            stock_book_price: "",
+            stock_book_date: "",
+            stock_market_price: "",
+            stock_market_date: "",
+            stock_issuer_risk_rate: "",
+            stock_risk_weight_of_collateral: "",
+            stock_holder_ratio: "",
+            room_no: "",
+            build_reg_no: "",
+            build_storey: "",
+            build_no: "",
+            build_name: "",
+            room_area: "",
+            concession_contract_rights_no: "",
+            concession_contract_rights_date: "",
+            rights_value: "",
+            date_of_transfer: "",
+            rights_balance: "",
+            as_of_lease_loan_date: "",
+            company_or_government_name: "",
+            branch_of_trafer_rights: "",
+            type_of_commudity: "",
+            insurance_capital_price: "",
+            insurance_market_price: "",
+            firstclass_insurance_flag: "",
+            rental_agreement_reg_no: "",
+            rental_agreement_issuer: "",
+            rental_agreement_type: "",
+            rental_agreement_expire_date: "",
+            rental_agreement_duration: "",
+            asset_to_equity_agreement_no: "",
+            asset_to_equity_agreement_issuer: "",
+            asset_to_equity_agreement_issue_date: "",
+            asset_to_equity_agreement_expire_date: "",
+            lg_no: "",
+            lg_issue_date: "",
+            salak_account_no: "",
+            cert_no: "",
+            lottery_low_no: "",
+            lottery_high_no: "",
+            salak_group: "",
+            salak_period: "",
+            lottery_unit: "",
+            cert_balance: "",
+            cert_record_no: "",
+            exeed_present_value: "",
+            total_present_value: "",
+            pawn_no: "",
+            pawn_weight: "",
+            pawn_product_code: "",
+            pawn_product_type: "",
+            pawn_product_kind: "",
+            pawn_cif: "",
+            pawn_storage_date_end: "",
+            pawn_company: "",
+            ticket_type: "",
+            ticket_no: "",
+            ticket_issuer: "",
+            ticket_date: "",
+            ticket_due_date: "",
+            document_date: "",
+            land_doc_subtype: "",
+            ground_no: "",
+            book_no: "",
+            page_no: "",
+            custom_enddate_collateral_date: generateDate(2028, 2035),
+            seq_no: "",
+            user_id: "1",
+            created_branch: branch,
+            appraisal_officer_1: `${randomElem(["นาย","นาง","นางสาว"])} ${randomElem(THAI_LAST_NAMES)} ${randomElem(THAI_FIRST_NAMES)}`, 
+            appraisal_officer_2: "",
+            appraisal_officer_3: "",
+          };
+
+          let fieldOverrides = {};
+          switch (selectedCollType) {
+            case "1":
+              if (selectedBotCollCode === "286006") {
+                fieldOverrides = {
+                  land_no: `${randomInt(100000, 999999)}`,
+                  land_volume_1: `${randomInt(1, 10)}`,
+                  land_volume_2: `${randomInt(0, 3)}`,
+                  land_volume_3: `${randomInt(0, 99)}`,
+                  land_volume_4: "0",
+                  ravang: "",
+                  land_value: configuredLandValue,
+                  build_value: configuredBuildValue,
+                  build_type: resolveBuildTypeValue(),
+                };
+              } else {
+                fieldOverrides = {
+                  land_no: `${randomInt(100000, 999999)}`,
+                  land_volume_1: `${randomInt(1, 10)}`,
+                  land_volume_2: `${randomInt(0, 3)}`,
+                  land_volume_3: `${randomInt(0, 99)}`,
+                  land_volume_4: "0",
+                  ravang: "",
+                  land_value: configuredLandValue,
+                  build_value: "",
+                };
+              }
+              break;
+            case "2":
+              fieldOverrides = {
+                road: "",
+                buid_soi: "",
+                build_no: `${randomInt(1, 999)}`,
+                build_type: resolveBuildTypeValue(),
+                aprs_value: configuredBuildAppraisalValue,
+              };
+              break;
+            case "3":
+              const codeStart = randomInt(1, 99999)
+              const useLife = randomInt(10, 99)
+              fieldOverrides = {
+                aprs_value: configuredMachineAppraisalValue,
+                machine_reg_code_start:`${codeStart}`,
+                machine_reg_code_end: `${codeStart + randomInt(2, 5)}`,
+                engine_capacity: 100,
+                unit_of_engine_capacity: 1, //หน่วยวัดสมรรถนะของหลักประกัน ให้เป็น 1 ไปก่อน
+                purchase_price: getCloseMoneyValue(configuredMachineAppraisalValue, 5),
+                used_start_date: now(), //ต้องไปแก้ไขดู เอาเป็น now
+                use_age:`${randomInt(1, useLife - 5)}`, //ตัวเลข 2 หลัก (fix แก้ไขได้) >> น้อยกว่าหรือเท่ากับ useful_life
+                ruling_cost: getCloseMoneyValue(configuredMachineAppraisalValue, 3), 
+                useful_life:`${useLife}`,
+              };
+              break;
+            case "4":
+              fieldOverrides = {
+                account_no: selectedType4AccountNo,
+                aprs_value: configuredType4AprsValue,
+              };
+              break;
+            case "5":
+              {
+                const bondStart = selectedBondStartNumber ? Number(selectedBondStartNumber) : 1;
+                const bondEnd = selectedBondEndNumber ? Number(selectedBondEndNumber) : 100;
+                const bondUnitPrice = selectedBondUnitPrice ? Number(selectedBondUnitPrice) : 1000;
+                const totalBondValue = ((bondEnd - bondStart) + 1) * bondUnitPrice;
+                fieldOverrides = {
+                  bond_code: `001`,
+                  issuance_year: currentYear(), //
+                  bond_sequence: `${selectedBondSequence}`, // ครั้งที่ออกเอกสาร from UI
+                  bond_start_number: `${bondStart}`, //
+                  bond_end_number: `${bondEnd}`, //
+                  bond_type: "5", //5
+                  bond_expire_date: resolveBondExpireDate(),
+                  bond_int_rate: `${randomInt(1, 10)}`,
+                  bond_unit_price: `${bondUnitPrice}`,
+                  bond_owner_name: `เจ้าของพันธบัตร ${randomInt(1, 999)}`,
+                  total_bond_value: `${totalBondValue}`, //มูลค่าตราสารตามราคาที่ตราไว้ คำนวณจาก ((bond_end_number - bond_start_number) + 1) * bond_unit_price
+                  stock_book_date: `${now()}` , // generateDate(2028, 2035)
+                  stock_market_price: `${selectedStockMarketPrice || "500"}`, //ราคาตลาดต่อหน่วย ใช้ในกรณี coll_type = 5,6 จำนวนเงิน > ใส่ 500  (fix ค่า ให้แก้ไขได้)
+                  stock_market_date: `${now()}`, // ราคาตลาด ณ วันที่ ใส่วันที่ปัจจุบัน (วัน-เดือน-ปี พศ.) > 31/03/2569
+                };
+              }
+              break;
+              break;
+            case "8":
+              fieldOverrides = {
+                room_no:`${randomInt(1, 999)} / ${randomInt(1, 999)}`,
+                build_reg_no: `${randomInt(1, 100)}`,
+                build_storey: `${randomInt(1, 10)}`,
+                build_no: `${randomInt(1, 100)} / ${randomInt(1, 100)}`,
+                build_name: "baac tower",
+                room_area: configuredRoomArea, 
+                aprs_value: configuredRoomAprsValue,
+              };
+              break;
+            case "13":
+              fieldOverrides = {
+                lg_no:`${randomInt(100000000, 999999999)}`,
+                lg_issue_date: now(), 
+                aprs_value: configuredType13AprsValue,
+              };
+              break;
+            case "14":
+              fieldOverrides = {
+                salak_account_no: configuredType14SalakAccount || `${randomInt(400000000000, 499999999999)}`,
+                cert_no:`${randomInt(100000000000, 999999999999)}`,
+                //lottery_low_no:`${randomInt(1000000, 9999999)}`,
+                //lottery_high_no:`${randomInt(1000000, 9999999)}`,
+                salak_group:`${randomElem(["A","B","C","D","E","F","G"])}${randomElem(["ก","ข","ซ","ฎ","ฑ","ธ","ต"])}`,
+                //salak_period:`${randomInt(1, 12)}`,
+                aprs_value: configuredType14AprsValue,
+              };
+              break;
+            case "7":
+              fieldOverrides = {
+                guarantor_cif_no: configuredType7GuarantorCifNo,
+                bot_coll_code: configuredType7BotCollCode,
+                sub_bot_coll_code: configuredType7SubBotCollCode,
+              };
+              break;
+            case "17":
+              const landNo = randomInt(100000, 999999);
+              fieldOverrides = {
+                land_no:`${landNo}`,
+                land_volume_1: `${randomInt(1, 10)}`,
+                land_volume_2: `${randomInt(0, 3)}`,
+                land_volume_3: `${randomInt(0, 99)}`,
+                land_volume_4: "0",
+                ravang: "",
+                land_value: configuredLandValue,
+                build_value: configuredBuildValue,
+                build_type: resolveBuildTypeValue(),
+                document_date:now(),
+                land_doc_subtype: selectedLandDocSubtype || "",
+              };
+              break;
+            case "99":
+              fieldOverrides = {
+                // If product select is cleared (e.g. for ships 286039) keep empty string — don't force default "1"
+                type_of_commudity: selectedTypeOfCommudity || "",
+                aprs_value: configuredType99AprsValue,
+              };
+              break;
+            default:
+              fieldOverrides = {};
+              break;
+          }
+
+          const rqBody = {
+            ...basePayload,
+            ...fieldOverrides,
+            aprs_value:
+              selectedCollType === "2"
+                ? (fieldOverrides.aprs_value || configuredBuildAppraisalValue)
+                : selectedCollType === "3"
+                  ? (fieldOverrides.aprs_value || configuredMachineAppraisalValue)
+                  : selectedCollType === "4"
+                    ? (fieldOverrides.aprs_value || configuredType4AprsValue)
+                    : selectedCollType === "8"
+                      ? (fieldOverrides.aprs_value || configuredRoomAprsValue)
+                      : selectedCollType === "13"
+                        ? (fieldOverrides.aprs_value || configuredType13AprsValue)
+                        : selectedCollType === "14"
+                          ? (fieldOverrides.aprs_value || configuredType14AprsValue)
+                        : selectedCollType === "99"
+                          ? (fieldOverrides.aprs_value || configuredType99AprsValue)
+                          : `${(Number(fieldOverrides.land_value ?? basePayload.land_value) || 0) + (Number(fieldOverrides.build_value ?? basePayload.build_value) || 0)}`,
+          };
+
+          if (selectedCollType === "14") {
+            rqBody.sub_bot_coll_code = "0";
+          }
+
+          return { rqBody };
+        },
+
+        createCollateralOwner: () => ({
+          rqBody: {
+            coll_id: getConfiguredTextValue("cfg-owner-coll-id", "15880"),
+            customer_id: getConfiguredTextValue("cfg-owner-customer-id", "18852"),
+            partial_pledge_owner_flag: "false",
+            user_id: "1",
+            created_branch: getConfiguredBranchCode(),
+          },
+        }),
+      };
+
+      const titles = {
+        personalCustomer: {
+          title: "Create Personal Customer",
+          subtitle: "/v1/customers/personal/create",
+        },
+        corporateCustomer: {
+          title: "Create Corporate Customer",
+          subtitle: "/v1/customers/corporate/create",
+        },
+        customerRegistration: {
+          title: "Create Customer Registration",
+          subtitle: "/v1/customers/registration/create",
+        },
+        collateralCreater: {
+          title: "Create Collateral",
+          subtitle: "/v1/collaterals/create",
+        },
+        createCollateralOwner: {
+          title: "Create Collateral Owner",
+          subtitle: "Payload with CIF and Collateral ID",
+        },
+      };
+
+      let currentApi = "personalCustomer";
+
+      function initCollateralTypeOptions() {
+        const select = document.getElementById("cfg-coll-type");
+        if (!select) return;
+
+        select.innerHTML = "";
+        COLLATERAL_TYPES.forEach((item) => {
+          const option = document.createElement("option");
+          option.value = item.value;
+          option.textContent = `${item.value} - ${item.description}`;
+          select.appendChild(option);
+        });
+
+        select.value = "1";
+        // Initialize field availability for default type
+        toggleCollateralSubtypeFields("1");
+      }
+
+      function toggleConfigPanels(apiName) {
+        const emptyState = document.getElementById("config-empty-state");
+        const addressPanel = document.getElementById("config-address-panel");
+        const ownerPanel = document.getElementById("config-collateral-owner-panel");
+        const panelType = API_CONFIG_PANEL_MAP[apiName] || "empty";
+
+        if (panelType === "address") {
+          addressPanel.classList.remove("hidden");
+          ownerPanel.classList.add("hidden");
+          emptyState.classList.add("hidden");
+        } else if (panelType === "owner") {
+          addressPanel.classList.add("hidden");
+          ownerPanel.classList.remove("hidden");
+          emptyState.classList.add("hidden");
+        } else {
+          addressPanel.classList.add("hidden");
+          ownerPanel.classList.add("hidden");
+          emptyState.classList.remove("hidden");
+        }
+      }
+
+      function togglePersonalCustomerConfigFields(apiName) {
+        const customerTypeGroup = document.getElementById("customer-type-config-group");
+        const registeredDateGroup = document.getElementById("registered-date-config-group");
+        const customerGradeGroup = document.getElementById("customer-grade-config-group");
+        // Show customer type and registered date for personal/corporate/registration
+        const shouldShow = apiName === "personalCustomer" || apiName === "corporateCustomer" || apiName === "customerRegistration";
+        [customerTypeGroup, registeredDateGroup].forEach((group) => {
+          if (!group) return;
+          group.classList.toggle("hidden", !shouldShow);
+        });
+
+        // Show customer grade only for customerRegistration
+        const shouldShowGrade = apiName === "customerRegistration";
+        if (customerGradeGroup) customerGradeGroup.classList.toggle("hidden", !shouldShowGrade);
+      }
+
+      function toggleCollateralTypePanel(apiName) {
+        const collateralPanel = document.getElementById("config-collateral-panel");
+        if (!collateralPanel) return;
+
+        if (apiName === "collateralCreater") {
+          collateralPanel.classList.remove("hidden");
+        } else {
+          collateralPanel.classList.add("hidden");
+        }
+      }
+
+      function toggleAddressInputs() {
+        const isRand = document.getElementById('rand-address-toggle').checked;
+        const container = document.getElementById('address-inputs-container');
+        
+        if (isRand) {
+            container.classList.add('opacity-50', 'pointer-events-none');
+        } else {
+            container.classList.remove('opacity-50', 'pointer-events-none');
+        }
+        
+        generateData();
+      }
+
+      function markCustomerTypeEdited() {
+        const el = document.getElementById('cfg-customer-type');
+        if (el) el.dataset.userEdited = '1';
+      }
+
+      function markCollateralOwnerEdited(inputId) {
+        const el = document.getElementById(inputId);
+        if (el) el.dataset.userEdited = '1';
+      }
+
+      function selectApi(apiName) {
+        currentApi = apiName;
+
+        // Active state in sidebar
+        document.querySelectorAll(".nav-button").forEach((btn) => {
+          btn.classList.remove("active", "bg-primary", "text-white", "font-semibold");
+          btn.classList.add("text-slate-600");
+        });
+        const activeBtn = document.getElementById(`nav-${apiName}`);
+        if (activeBtn) {
+          activeBtn.classList.add("active", "bg-primary", "text-white", "font-semibold");
+          activeBtn.classList.remove("text-slate-600");
+        }
+
+        // Header text
+        const titleMeta = titles[apiName] || {
+          title: "API Configuration",
+          subtitle: "",
+        };
+        document.getElementById("content-title").innerText = titleMeta.title;
+        document.getElementById("content-subtitle").innerText = titleMeta.subtitle;
+
+        toggleConfigPanels(apiName);
+        toggleCollateralTypePanel(apiName);
+        togglePersonalCustomerConfigFields(apiName);
+
+        // Update label text to show 'CIF' for registration flow
+        const custLabel = document.getElementById('cfg-customer-type-label');
+        if (custLabel) {
+          custLabel.innerText = apiName === 'customerRegistration' ? 'CIF' : 'Customer Type';
+        }
+
+        // Set sensible defaults for the customer type field only if user hasn't edited it
+        const custInput = document.getElementById('cfg-customer-type');
+        if (custInput && !custInput.dataset.userEdited) {
+          if (apiName === 'customerRegistration') {
+            custInput.value = '28825';
+          } else {
+            custInput.value = '603';
+          }
+        }
+
+        const ownerCifInput = document.getElementById('cfg-owner-customer-id');
+        if (ownerCifInput && !ownerCifInput.dataset.userEdited && apiName === 'createCollateralOwner') {
+          ownerCifInput.value = '18852';
+        }
+
+        const ownerCollIdInput = document.getElementById('cfg-owner-coll-id');
+        if (ownerCollIdInput && !ownerCollIdInput.dataset.userEdited && apiName === 'createCollateralOwner') {
+          ownerCollIdInput.value = '15880';
+        }
+
+        generateData();
+      }
+
+      function generateData(typeOverride) {
+        const editor = document.getElementById("json-editor");
+        if (generators[currentApi]) {
+          const payload = generators[currentApi](typeOverride);
+          editor.value = JSON.stringify(payload, null, 4);
+        }
+      }
+
+      function copyToClipboard() {
+        const editor = document.getElementById("json-editor");
+        editor.select();
+        editor.setSelectionRange(0, 99999);
+        navigator.clipboard.writeText(editor.value).then(() => {
+          const toast = document.getElementById("copy-toast");
+          toast.classList.remove("opacity-0");
+          setTimeout(() => {
+            toast.classList.add("opacity-0");
+          }, 2000);
+        });
+      }
+
+      window.onload = () => {
+        initCollateralTypeOptions();
+        const registeredDateInput = document.getElementById("cfg-registered-date");
+        if (registeredDateInput) {
+          registeredDateInput.value = now();
+        }
+        selectApi(currentApi);
+      };
+    </script>
+  </body>
+</html>
