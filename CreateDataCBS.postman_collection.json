@@ -1,0 +1,964 @@
+{
+  "info": {
+    "_postman_id": "04fe5434-cc2b-4a74-b9f6-0cfd116a60a6",
+    "name": "CreateDataCBS",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "47839353"
+  },
+  "item": [
+    {
+      "name": "1-createPersonalCustomer",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": " application/json",
+            "type": "text"
+          },
+          {
+            "key": "x-request-id",
+            "value": "111111111111",
+            "type": "text"
+          },
+          {
+            "key": "x-real-ip",
+            "value": "1.1.1.1",
+            "type": "text"
+          },
+          {
+            "key": "x-application",
+            "value": "TEST",
+            "type": "text"
+          },
+          {
+            "key": "user-agent",
+            "value": "HTTP",
+            "type": "text"
+          },
+          {
+            "key": "datetime",
+            "value": "2023-03-02T13:15:04+07:00",
+            "type": "text"
+          },
+          {
+            "key": "accept_language",
+            "value": "EN",
+            "type": "text"
+          },
+          {
+            "key": "accept_encoding",
+            "value": "utf-8",
+            "type": "text"
+          },
+          {
+            "key": "x-job-id",
+            "value": "17ca7891-7325-424a-b8e3-37b460f5b8d3",
+            "type": "text"
+          },
+          {
+            "key": "x-caller-service",
+            "value": "aa",
+            "type": "text"
+          },
+          {
+            "key": "x-caller-domain",
+            "value": "bb",
+            "type": "text"
+          },
+          {
+            "key": "accept",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "x-device",
+            "value": "cc",
+            "type": "text"
+          },
+          {
+            "key": "x-channel",
+            "value": "lps",
+            "type": "text"
+          },
+          {
+            "key": "original-caller-domain",
+            "value": "10",
+            "type": "text"
+          },
+          {
+            "key": "requested-service",
+            "value": "CREATEPERSONALCUSTOMER",
+            "type": "text"
+          },
+          {
+            "key": "requested-service-version",
+            "value": "v1",
+            "type": "text"
+          },
+          {
+            "key": "x-api-key",
+            "value": "LpNlBmZghzQvnFyyB5YT5i19oMydU7GU",
+            "type": "text"
+          },
+          {
+            "key": "apikey",
+            "value": "7fSa4cWbMD9GxaDXyMYdileogJGl7GRa",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"rqBody\": {\r\n        \"citizen_id\": \"2316092812804\",\r\n        \"customer_title\": \"นาย\",\r\n        \"customer_first_name\": \"เกษตรกร\",\r\n        \"customer_middle_name\": \"ทดสอบ\",\r\n        \"customer_last_name\": \"Phoenix\",\r\n        \"english_customer_title\": \"MR.\",\r\n        \"english_first_name\": \"farmer\",\r\n        \"english_middle_name\": \"Test\",\r\n        \"english_last_name\": \"Phoenix\",\r\n        \"permanent_address\": {\r\n            \"address1\": \"ที่อยู่ทดสอบ 1\",\r\n            \"address2\": \"ที่อยู่ทดสอบ 2\",\r\n            \"address3\": \"ที่อยู่ทดสอบ 3\",\r\n            \"address4\": \"ที่อยู่ทดสอบ 4\",\r\n            \"moo\": \"1\",\r\n            \"country\": \"TH\",\r\n            \"province\": \"10\",\r\n            \"district\": \"01\",\r\n            \"sub_district\": \"09\",\r\n            \"zip\": \"10200\",\r\n            \"house_hold_number\": \"29\"\r\n        },\r\n        \"mailing_address\": {\r\n            \"address1\": \"ที่อยู่ทดสอบ 5\",\r\n            \"address2\": \"ที่อยู่ทดสอบ 6\",\r\n            \"address3\": \"ที่อยู่ทดสอบ 7\",\r\n            \"address4\": \"ที่อยู่ทดสอบ 8\",\r\n            \"moo\": \"2\",\r\n            \"country\": \"TH\",\r\n            \"province\": \"16\",\r\n            \"district\": \"02\",\r\n            \"sub_district\": \"06\",\r\n            \"zip\": \"15140\"\r\n        },\r\n        \"office_address\": {\r\n            \"address1\": \"ที่อยู่ทดสอบ 5\",\r\n            \"address2\": \"ที่อยู่ทดสอบ 6\",\r\n            \"address3\": \"ที่อยู่ทดสอบ 7\",\r\n            \"address4\": \"ที่อยู่ทดสอบ 8\",\r\n            \"moo\": \"2\",\r\n            \"country\": \"TH\",\r\n            \"province\": \"16\",\r\n            \"district\": \"02\",\r\n            \"sub_district\": \"06\",\r\n            \"zip\": \"15140\"\r\n        },\r\n        \"date_of_birth\": \"1982-11-15\",\r\n        \"date_of_birth_code\": \"1\",\r\n        \"date_of_death\": \"\",\r\n        \"number_of_dependents\": \"\",\r\n        \"spouse_citizen_id\": \"\",\r\n        \"spouse_title\": \"\",\r\n        \"spouse_name\": \"\",\r\n        \"spouse_last_name\": \"\",\r\n        \"religion\": \"1\",\r\n        \"sex\": \"M\",\r\n        \"income\": \"4\",\r\n        \"marital\": \"S\",\r\n        \"education\": \"9\",\r\n        \"occupation\": \"01\",\r\n        \"sub_occupation\": \"04\",\r\n        \"ministry_code1\": \"90000\",\r\n        \"ministry_code2\": \"99000\",\r\n        \"ministry_code3\": \"99999\",\r\n        \"nationality\": \"TH\",\r\n        \"residency\": \"TH\",\r\n        \"home_phone\": \"023334444\",\r\n        \"home_phone_ext\": \"111\",\r\n        \"mobile_phone\": \"0812223333\",\r\n        \"office_phone\": \"024445555\",\r\n        \"office_phone_ext\": \"222\",\r\n        \"fax_phone\": \"026667777\",\r\n        \"email\": \"a@gmail.com\",\r\n        \"customer\": \"603\",\r\n        \"employee_id\": \"\",\r\n        \"citizen_card\": {\r\n            \"issue_center\": \"พระนคร\",\r\n            \"issue_date\": \"2017-11-15\",\r\n            \"expire_date\": \"2027-11-15\"\r\n        },\r\n        \"risk_rating\": \"2\",\r\n        \"branch_code\": \"581\",\r\n        \"user_id\": \"1\"\r\n    }\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://soagwuat.kube.baac.or.th:8543/LPSWS-cbsiuat/service/v1/customers/personal/create",
+          "protocol": "https",
+          "host": [
+            "soagwuat",
+            "kube",
+            "baac",
+            "or",
+            "th"
+          ],
+          "port": "8543",
+          "path": [
+            "LPSWS-cbsiuat",
+            "service",
+            "v1",
+            "customers",
+            "personal",
+            "create"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "2-createCorporateCustomer",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": " application/json",
+            "type": "text"
+          },
+          {
+            "key": "x-request-id",
+            "value": "111111111111",
+            "type": "text"
+          },
+          {
+            "key": "x-real-ip",
+            "value": "1.1.1.1",
+            "type": "text"
+          },
+          {
+            "key": "x-application",
+            "value": "TEST",
+            "type": "text"
+          },
+          {
+            "key": "user-agent",
+            "value": "HTTP",
+            "type": "text"
+          },
+          {
+            "key": "datetime",
+            "value": "2023-03-02T13:15:04+07:00",
+            "type": "text"
+          },
+          {
+            "key": "accept_language",
+            "value": "EN",
+            "type": "text"
+          },
+          {
+            "key": "accept_encoding",
+            "value": "utf-8",
+            "type": "text"
+          },
+          {
+            "key": "x-job-id",
+            "value": "17ca7891-7325-424a-b8e3-37b460f5b8d3",
+            "type": "text"
+          },
+          {
+            "key": "x-caller-service",
+            "value": "aa",
+            "type": "text"
+          },
+          {
+            "key": "x-caller-domain",
+            "value": "bb",
+            "type": "text"
+          },
+          {
+            "key": "accept",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "x-device",
+            "value": "cc",
+            "type": "text"
+          },
+          {
+            "key": "x-channel",
+            "value": "lps",
+            "type": "text"
+          },
+          {
+            "key": "original-caller-domain",
+            "value": "10",
+            "type": "text"
+          },
+          {
+            "key": "requested-service",
+            "value": "createCorporateCustomer",
+            "type": "text"
+          },
+          {
+            "key": "requested-service-version",
+            "value": "v1",
+            "type": "text"
+          },
+          {
+            "key": "x-api-key",
+            "value": "LpNlBmZghzQvnFyyB5YT5i19oMydU7GU",
+            "type": "text"
+          },
+          {
+            "key": "apikey",
+            "value": "7fSa4cWbMD9GxaDXyMYdileogJGl7GRa",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"rqBody\": {\r\n     \"customer\" : \"707\",\r\n     \"customer_title\" : \"สหกรณ์\",\r\n     \"customer_name\" : \"ทดสอบเซอร์วิสฟินิกส์\",\r\n     \"english_customer_title\" : \"Group\",\r\n     \"english_customer_name\" : \"Test Service\",\r\n     \"permanent_address\" : \r\n     {\r\n          \"address1\" : \"1/49\",\r\n          \"address2\" : \"ซ.แสนหวาน\",\r\n          \"address3\" : \"ถ.ฮารุ\",\r\n          \"address4\" : \"\",\r\n          \"moo\" : \"1\",\r\n          \"country\" : \"TH\",\r\n          \"province\" : \"10\",\r\n          \"district\" : \"01\",\r\n          \"sub_district\" : \"09\",\r\n          \"zip\" : \"10200\"\r\n     },\r\n     \"mailing_address\" : \r\n     {\r\n          \"address1\" : \"ที่อยู่นิติ 5\",\r\n          \"address2\" : \"ที่อยู่นิติ 6\",\r\n          \"address3\" : \"ที่อยู่นิติ 7\",\r\n          \"address4\" : \"ที่อยู่นิติ 8\",\r\n          \"moo\" : \"2\",\r\n          \"country\" : \"TH\",\r\n          \"province\" : \"16\",\r\n          \"district\" : \"02\",\r\n          \"sub_district\" : \"06\",\r\n          \"zip\" : \"15140\"\r\n     },\r\n     \"office_address\" : \r\n     {\r\n          \"address1\" : \"ที่อยู่นิติ 9\",\r\n          \"address2\" : \"ที่อยู่นิติ 10\",\r\n          \"address3\" : \"ที่อยู่นิติ 11\",\r\n          \"address4\" : \"ที่อยู่นิติ 12\",\r\n          \"moo\" : \"3\",\r\n          \"country\" : \"TH\",\r\n          \"province\" : \"11\",\r\n          \"district\" : \"02\",\r\n          \"sub_district\" : \"05\",\r\n          \"zip\" : \"10550\"\r\n     },\r\n     \"business_info\" : \r\n     {\r\n          \"establish_objective\" : \"ทดสอบ LPS\",\r\n          \"nationality\" : \"TH\",\r\n          \"residency\" : \"TH\",\r\n          \"total_assets\" : \"20000000.00\",\r\n          \"liability\" : \"0.00\",\r\n          \"expense\" : \"10000000.00\",\r\n          \"net_profit\" : \"5000000.00\",\r\n          \"cash_flow\" : \"4000000.00\",\r\n          \"capital\" : \"14000000.00\",\r\n          \"registered_capital\" : \"24000000.00\",\r\n          \"paidup_capital\" : \"200000.00\",\r\n          \"annual_sales\" : \"22200000.00\",\r\n          \"net_worth\" : \"15000000.00\",\r\n          \"last_financial_update\" : \"2017-11-15\",\r\n          \"risk_rating\" : \"1\",\r\n          \"credit_line\" : \"444000000.00\",\r\n          \"ISIC_section\" : \"A01\",\r\n          \"ISIC_group\" : \"010\",\r\n          \"ISIC_specific_code\" : \"0100\"\r\n     },\r\n     \"contact_info\" : \r\n     {\r\n          \"office_phone\" : \"021112222\",\r\n          \"office_phone_ext\" : \"111\",\r\n          \"factory_phone\" : \"021112224\",\r\n          \"factory_phone_ext\" : \"222\",\r\n          \"mobile_phone\" : \"0892223333\",\r\n          \"fax_phone\" : \"021112227\",\r\n          \"email\" : \"t@gmail.com\"\r\n     },\r\n     \"BOT_info\" : \r\n     {\r\n          \"tax_id\" : \"6606021234567\",\r\n          \"bot_assigned_code\" : \"456\",\r\n          \"boi_flag\" : \"false\",\r\n          \"juristic_id\" : \"6606021234567\",\r\n          \"juristic_registered_date\" : \"2017-11-16\",\r\n          \"swift_code\" : \"55555\",\r\n          \"government_document_number\" : \"66666\",\r\n          \"fi_code\" : \"001\",\r\n          \"fi_assigned_code\" : \"002\",\r\n          \"inter_org_oversea_gov_id\" : \"003\",\r\n          \"oversea_juristic_id\" : \"004\",\r\n          \"other_juristic_id\" : \"005\"\r\n     },\r\n     \"other_card_info\" : \r\n     {\r\n          \"other_id_type\" : \"3\",\r\n          \"other_id_number\" : \"3A-12345\",\r\n          \"issue_center\" : \"บางแค\",\r\n          \"issue_date\" : \"2017-11-17\",\r\n          \"expire_date\" : \"2027-11-15\"\r\n     },\r\n     \"customer_group_info\" : \r\n     {\r\n          \"customer_group_flag\" : \"true\",\r\n          \"group_type_code\" : \"1\",\r\n          \"group_activity_code\" : \"2\",\r\n          \"group_product_name\" : \"Test\",\r\n          \"group_common_occupation\" : \"7\",\r\n          \"group_establish_date\" : \"2017-11-20\",\r\n          \"group_establish_member\" : \"10\",\r\n          \"group_current_member\" : \"100\",\r\n          \"group_objective\" : \"ทดสอบ 111\"\r\n     },\r\n     \"branch_code\" : \"581\",\r\n     \"user_id\" : \"1\"\r\n}\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://soagwuat.kube.baac.or.th:8543/LPSWS-cbsiuat/service/v1/customers/corporate/create",
+          "protocol": "https",
+          "host": [
+            "soagwuat",
+            "kube",
+            "baac",
+            "or",
+            "th"
+          ],
+          "port": "8543",
+          "path": [
+            "LPSWS-cbsiuat",
+            "service",
+            "v1",
+            "customers",
+            "corporate",
+            "create"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "3-createCustomerRegistration",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": " application/json",
+            "type": "text"
+          },
+          {
+            "key": "x-request-id",
+            "value": "111111111111",
+            "type": "text"
+          },
+          {
+            "key": "x-real-ip",
+            "value": "1.1.1.1",
+            "type": "text"
+          },
+          {
+            "key": "x-application",
+            "value": "TEST",
+            "type": "text"
+          },
+          {
+            "key": "user-agent",
+            "value": "HTTP",
+            "type": "text"
+          },
+          {
+            "key": "datetime",
+            "value": "2023-03-02T13:15:04+07:00",
+            "type": "text"
+          },
+          {
+            "key": "accept_language",
+            "value": "EN",
+            "type": "text"
+          },
+          {
+            "key": "accept_encoding",
+            "value": "utf-8",
+            "type": "text"
+          },
+          {
+            "key": "x-job-id",
+            "value": "17ca7891-7325-424a-b8e3-37b460f5b8d3",
+            "type": "text"
+          },
+          {
+            "key": "x-caller-service",
+            "value": "aa",
+            "type": "text"
+          },
+          {
+            "key": "x-caller-domain",
+            "value": "bb",
+            "type": "text"
+          },
+          {
+            "key": "accept",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "x-device",
+            "value": "cc",
+            "type": "text"
+          },
+          {
+            "key": "x-channel",
+            "value": "lps",
+            "type": "text"
+          },
+          {
+            "key": "original-caller-domain",
+            "value": "10",
+            "type": "text"
+          },
+          {
+            "key": "requested-service",
+            "value": "createCustomerRegistration",
+            "type": "text"
+          },
+          {
+            "key": "requested-service-version",
+            "value": "v1",
+            "type": "text"
+          },
+          {
+            "key": "x-api-key",
+            "value": "LpNlBmZghzQvnFyyB5YT5i19oMydU7GU",
+            "type": "text"
+          },
+          {
+            "key": "apikey",
+            "value": "7fSa4cWbMD9GxaDXyMYdileogJGl7GRa",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"rqBody\": {\r\n     \"customer_id\" : \"28825\",\r\n     \"branch_of_ownership\" : \"581\",\r\n     \"group_code\" : \"1\",\r\n     \"loan_region\" : \"1\",\r\n     \"customer_status\" : \"0\",\r\n     \"customer_grade\" : \"AAA+\",\r\n     \"registered_date\" : \"2020-11-15\",\r\n     \"customer_address\" : \r\n     {\r\n          \"address1\" : \"ที่อยู่ 1\",\r\n          \"address2\" : \"ที่อยู่ 2\",\r\n          \"address3\" : \"ที่อยู่ 3\",\r\n          \"address4\" : \"ที่อยู่ 4\",\r\n          \"moo\" : \"1\",\r\n          \"sub_district\" : \"15\",\r\n          \"district\" : \"03\",\r\n          \"province\" : \"44\",\r\n          \"country\" : \"TH\",\r\n          \"zip\" : \"44140\"\r\n     },\r\n     \"bank_district_code\" : \"4108\",\r\n     \"old_group_code\" : \"1\",\r\n     \"registered_status\" : \"00\",\r\n     \"updated_user_id\" : \"1\",\r\n     \"subsidy\" : \r\n     {\r\n          \"subsidy_plan\" : \"\",\r\n          \"maximum_subsidy_amount\" : \"\",\r\n          \"available_subsidy_amount\" : \"\",\r\n          \"subsidy_customer_status\" : \"\",\r\n          \"subsidy_customer_unaccrue_flag\" : \"false\",\r\n          \"subsidy_customer_type\" : \"\"\r\n     },\r\n     \"rehabilitation_customer\" : \r\n     {\r\n          \"rehabilitation_customer_flag\" : \"false\",\r\n          \"rehabilitation_round\" : \"\",\r\n          \"rehabilitation_date\" : \"\"\r\n     },\r\n     \"branch_code\" : \"581\",\r\n     \"user_id\" : \"1\"\r\n}\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://soagwuat.kube.baac.or.th:8543/LPSWS-cbsiuat/service/v1/customers/registration/create",
+          "protocol": "https",
+          "host": [
+            "soagwuat",
+            "kube",
+            "baac",
+            "or",
+            "th"
+          ],
+          "port": "8543",
+          "path": [
+            "LPSWS-cbsiuat",
+            "service",
+            "v1",
+            "customers",
+            "registration",
+            "create"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "4-updateCustomerRegistration",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": " application/json",
+            "type": "text"
+          },
+          {
+            "key": "x-request-id",
+            "value": "111111111111",
+            "type": "text"
+          },
+          {
+            "key": "x-real-ip",
+            "value": "1.1.1.1",
+            "type": "text"
+          },
+          {
+            "key": "x-application",
+            "value": "TEST",
+            "type": "text"
+          },
+          {
+            "key": "user-agent",
+            "value": "HTTP",
+            "type": "text"
+          },
+          {
+            "key": "datetime",
+            "value": "2023-03-02T13:15:04+07:00",
+            "type": "text"
+          },
+          {
+            "key": "accept_language",
+            "value": "EN",
+            "type": "text"
+          },
+          {
+            "key": "accept_encoding",
+            "value": "utf-8",
+            "type": "text"
+          },
+          {
+            "key": "x-job-id",
+            "value": "17ca7891-7325-424a-b8e3-37b460f5b8d3",
+            "type": "text"
+          },
+          {
+            "key": "x-caller-service",
+            "value": "aa",
+            "type": "text"
+          },
+          {
+            "key": "x-caller-domain",
+            "value": "bb",
+            "type": "text"
+          },
+          {
+            "key": "accept",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "x-device",
+            "value": "cc",
+            "type": "text"
+          },
+          {
+            "key": "x-channel",
+            "value": "lps",
+            "type": "text"
+          },
+          {
+            "key": "original-caller-domain",
+            "value": "10",
+            "type": "text"
+          },
+          {
+            "key": "requested-service",
+            "value": "updateCustomerRegistration",
+            "type": "text"
+          },
+          {
+            "key": "requested-service-version",
+            "value": "v1",
+            "type": "text"
+          },
+          {
+            "key": "x-api-key",
+            "value": "LpNlBmZghzQvnFyyB5YT5i19oMydU7GU",
+            "type": "text"
+          },
+          {
+            "key": "apikey",
+            "value": "7fSa4cWbMD9GxaDXyMYdileogJGl7GRa",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"rqBody\": {\r\n     \"customer_id\" : \"28383\",\r\n     \"branch_of_ownership\" : \"581\",\r\n     \"group_code\" : \"1\",\r\n     \"loan_region\" : \"2\",\r\n     \"customer_status\" : \"0\",\r\n     \"customer_grade\" : \"A\",\r\n     \"registered_date\" : \"2020-11-15\",\r\n     \"customer_address\" : \r\n     {\r\n          \"address1\" : \"311\",\r\n          \"address2\" : \"\",\r\n          \"address3\" : \"\",\r\n          \"address4\" : \"\",\r\n          \"moo\" : \"\",\r\n          \"sub_district\" : \"04\",\r\n          \"district\" : \"16\",\r\n          \"province\" : \"14\",\r\n          \"country\" : \"TH\",\r\n          \"zip\" : \"13240\"\r\n     },\r\n     \"bank_district_code\" : \"4108\",\r\n     \"old_group_code\" : \"10\",\r\n     \"registered_status\" : \"00\",\r\n     \"updated_user_id\" : \"540114\",\r\n     \"subsidy\" : \r\n     {\r\n          \"subsidy_plan\" : \"\",\r\n          \"maximum_subsidy_amount\" : \"\",\r\n          \"available_subsidy_amount\" : \"\",\r\n          \"subsidy_customer_status\" : \"\",\r\n          \"subsidy_customer_unaccrue_flag\" : \"false\",\r\n          \"subsidy_customer_type\" : \"\"\r\n     },\r\n     \"rehabilitation_customer\" : \r\n     {\r\n          \"rehabilitation_customer_flag\" : \"false\",\r\n          \"rehabilitation_round\" : \"\",\r\n          \"rehabilitation_date\" : \"\"\r\n     },\r\n     \"branch_code\" : \"581\",\r\n     \"user_id\" : \"1\"\r\n}\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://soagwuat.kube.baac.or.th:8543/LPSWS-cbsiuat/service/v1/customers/registration/update",
+          "protocol": "https",
+          "host": [
+            "soagwuat",
+            "kube",
+            "baac",
+            "or",
+            "th"
+          ],
+          "port": "8543",
+          "path": [
+            "LPSWS-cbsiuat",
+            "service",
+            "v1",
+            "customers",
+            "registration",
+            "update"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "5-updatePersonalCustomer",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": " application/json",
+            "type": "text"
+          },
+          {
+            "key": "x-request-id",
+            "value": "111111111111",
+            "type": "text"
+          },
+          {
+            "key": "x-real-ip",
+            "value": "1.1.1.1",
+            "type": "text"
+          },
+          {
+            "key": "x-application",
+            "value": "TEST",
+            "type": "text"
+          },
+          {
+            "key": "user-agent",
+            "value": "HTTP",
+            "type": "text"
+          },
+          {
+            "key": "datetime",
+            "value": "2023-03-02T13:15:04+07:00",
+            "type": "text"
+          },
+          {
+            "key": "accept_language",
+            "value": "EN",
+            "type": "text"
+          },
+          {
+            "key": "accept_encoding",
+            "value": "utf-8",
+            "type": "text"
+          },
+          {
+            "key": "x-job-id",
+            "value": "17ca7891-7325-424a-b8e3-37b460f5b8d3",
+            "type": "text"
+          },
+          {
+            "key": "x-caller-service",
+            "value": "aa",
+            "type": "text"
+          },
+          {
+            "key": "x-caller-domain",
+            "value": "bb",
+            "type": "text"
+          },
+          {
+            "key": "accept",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "x-device",
+            "value": "cc",
+            "type": "text"
+          },
+          {
+            "key": "x-channel",
+            "value": "lps",
+            "type": "text"
+          },
+          {
+            "key": "original-caller-domain",
+            "value": "10",
+            "type": "text"
+          },
+          {
+            "key": "requested-service",
+            "value": "updatePersonalCustomer",
+            "type": "text"
+          },
+          {
+            "key": "requested-service-version",
+            "value": "v1",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"rqBody\": {\r\n     \"customer_id\" : \"17211\",\r\n     \"customer_title\" : \"นาย\",\r\n     \"customer_first_name\" : \"หนึ่ง\",\r\n     \"customer_middle_name\" : \"สอง\",\r\n     \"customer_last_name\" : \"สามเอ\",\r\n     \"english_customer_title\" : \"MR.\",\r\n     \"english_first_name\" : \"One\",\r\n     \"english_middle_name\" : \"Two\",\r\n     \"english_last_name\" : \"ThreeAA\",\r\n     \"permanent_address\" : \r\n     {\r\n          \"address1\" : \"ที่อยู่ทดสอบ 1 ทดสอบ ทดสอบ\",\r\n          \"address2\" : \"ที่อยู่ทดสอบ 2\",\r\n          \"address3\" : \"ที่อยู่ทดสอบ 3\",\r\n          \"address4\" : \"ที่อยู่ทดสอบ 4\",\r\n          \"moo\" : \"1\",\r\n          \"country\" : \"TH\",\r\n          \"province\" : \"10\",\r\n          \"district\" : \"01\",\r\n          \"sub_district\" : \"09\",\r\n          \"zip\" : \"10200\",\r\n          \"house_hold_number\" : \"29\"\r\n     },\r\n     \"mailing_address\" : \r\n     {\r\n          \"address1\" : \"ที่อยู่ทดสอบ 5\",\r\n          \"address2\" : \"ที่อยู่ทดสอบ 6\",\r\n          \"address3\" : \"ที่อยู่ทดสอบ 7\",\r\n          \"address4\" : \"ที่อยู่ทดสอบ 8\",\r\n          \"moo\" : \"2\",\r\n          \"country\" : \"TH\",\r\n          \"province\" : \"16\",\r\n          \"district\" : \"02\",\r\n          \"sub_district\" : \"06\",\r\n          \"zip\" : \"15140\"\r\n     },\r\n     \"office_address\" : \r\n     {\r\n          \"address1\" : \"ที่อยู่ทดสอบ 5\",\r\n          \"address2\" : \"ที่อยู่ทดสอบ 6\",\r\n          \"address3\" : \"ที่อยู่ทดสอบ 7\",\r\n          \"address4\" : \"ที่อยู่ทดสอบ 8\",\r\n          \"moo\" : \"2\",\r\n          \"country\" : \"TH\",\r\n          \"province\" : \"16\",\r\n          \"district\" : \"02\",\r\n          \"sub_district\" : \"06\",\r\n          \"zip\" : \"15140\"\r\n     },\r\n     \"date_of_birth\" : \"2017-11-15\",\r\n     \"date_of_birth_code\" : \"1\",\r\n     \"date_of_death\" : \"\",\r\n     \"number_of_dependents\" : \"2\",\r\n     \"spouse_citizen_id\" : \"1972303902321\",\r\n     \"spouse_title\" : \"นาง\",\r\n     \"spouse_name\" : \"ภรรยา\",\r\n     \"spouse_last_name\" : \"คู่สมรส\",\r\n     \"religion\" : \"1\",\r\n     \"sex\" : \"M\",\r\n     \"income\" : \"4\",\r\n     \"marital\" : \"M\",\r\n     \"education\" : \"9\",\r\n     \"occupation\" : \"03\",\r\n     \"sub_occupation\" : \"01\",\r\n     \"ministry_code1\" : \"90000\",\r\n     \"ministry_code2\" : \"99000\",\r\n     \"ministry_code3\" : \"99999\",\r\n     \"nationality\" : \"TH\",\r\n     \"residency\" : \"TH\",\r\n     \"home_phone\" : \"023334444\",\r\n     \"home_phone_ext\" : \"111\",\r\n     \"mobile_phone\" : \"0812223333\",\r\n     \"office_phone\" : \"024445555\",\r\n     \"office_phone_ext\" : \"222\",\r\n     \"fax_phone\" : \"026667777\",\r\n     \"email\" : \"a@gmail.com\",\r\n     \"customer\" : \"600\",\r\n     \"employee_id\" : \"\",\r\n     \"citizen_card\" : \r\n     {\r\n          \"issue_center\" : \"พระนคร\",\r\n          \"issue_date\" : \"2017-11-15\",\r\n          \"expire_date\" : \"2027-11-15\"\r\n     },\r\n     \"risk_rating\" : \"2\",\r\n     \"branch_code\" : \"1\",\r\n     \"user_id\" : \"1\"\r\n}\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://soagwuat.kube.baac.or.th:8543/LPSWS-cbsiuat/service/v1/customers/personal/update",
+          "protocol": "https",
+          "host": [
+            "soagwuat",
+            "kube",
+            "baac",
+            "or",
+            "th"
+          ],
+          "port": "8543",
+          "path": [
+            "LPSWS-cbsiuat",
+            "service",
+            "v1",
+            "customers",
+            "personal",
+            "update"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "6-createCollateral คำอธิบาย",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": " application/json",
+            "type": "text"
+          },
+          {
+            "key": "x-request-id",
+            "value": "111111111111",
+            "type": "text"
+          },
+          {
+            "key": "x-real-ip",
+            "value": "1.1.1.1",
+            "type": "text"
+          },
+          {
+            "key": "x-application",
+            "value": "TEST",
+            "type": "text"
+          },
+          {
+            "key": "user-agent",
+            "value": "HTTP",
+            "type": "text"
+          },
+          {
+            "key": "datetime",
+            "value": "2023-03-02T13:15:04+07:00",
+            "type": "text"
+          },
+          {
+            "key": "accept_language",
+            "value": "EN",
+            "type": "text"
+          },
+          {
+            "key": "accept_encoding",
+            "value": "utf-8",
+            "type": "text"
+          },
+          {
+            "key": "x-job-id",
+            "value": "17ca7891-7325-424a-b8e3-37b460f5b8d3",
+            "type": "text"
+          },
+          {
+            "key": "x-caller-service",
+            "value": "aa",
+            "type": "text"
+          },
+          {
+            "key": "x-caller-domain",
+            "value": "bb",
+            "type": "text"
+          },
+          {
+            "key": "accept",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "x-device",
+            "value": "cc",
+            "type": "text"
+          },
+          {
+            "key": "x-channel",
+            "value": "lps",
+            "type": "text"
+          },
+          {
+            "key": "original-caller-domain",
+            "value": "10",
+            "type": "text"
+          },
+          {
+            "key": "requested-service",
+            "value": "createCollateral",
+            "type": "text"
+          },
+          {
+            "key": "requested-service-version",
+            "value": "v1",
+            "type": "text"
+          },
+          {
+            "key": "x-api-key",
+            "value": "LpNlBmZghzQvnFyyB5YT5i19oMydU7GU",
+            "type": "text"
+          },
+          {
+            "key": "apikey",
+            "value": "7fSa4cWbMD9GxaDXyMYdileogJGl7GRa",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"rqBody\": {\r\n     \"coll_type\" : \"1\", // Collateral Type type 1 = ที่ดิน\r\n     \"coll_subtype\" : \"1\", // Sub Type\r\n     \"bot_coll_code\" : \"286003\", // รหัสหลักประกันธนาคารแห่งประเทศไทย\r\n     \"sub_bot_coll_code\" : \"\", // รหัสหลักประกันย่อย\r\n     \"remarks\" : \"Create_ELG\", // หมายเหตุ\r\n     \"aprs_date\" : \"2023-04-02\", // วันที่ประเมิน\r\n     \"aprs_value\" : \"500000\", // ราคาประเมิน\r\n     \"aprs_by\" : \"1\", //ประเมินโดย : 1 - สาขา, 2 - ฝ่ายควบคุมงานประเมินราคา, 3 - บริษัทภายนอก, 4 - ธนาคารต้นไม้, 5 - ระบบ AAG \r\n     \"aprs_tax_id\" : \"\", // เลขทะเบียนผู้เสียภาษี กรณี aprs_by = 3 - บริษัทภายนอก ต้องทำ Table reference เป็น dropdownlist ให้เลือก\r\n     \"aprs_boo\" : \"581\", //สาขาเจ้าของหลักประกัน\r\n     \"province\" : \"041\", // จังหวัด ต้องทำ Table reference ต้องทำ Table reference เป็น dropdownlist ให้เลือก\r\n     \"district\" : \"001\", // อำเภอ/เขต ต้องทำ Table reference เป็น dropdownlist ให้เลือก\r\n     \"sub_district\" : \"001\", // ตำบล/แขวง ต้องทำ Table reference เป็น dropdownlist ให้เลือก\r\n     \"road\" : \"\", // กรณีเลือก coll_type = 2 สิ่งปลูกสร้าง ที่ดินไม่ได้ใช้\r\n     \"build_code\" : \"\", // กรณีเลือก coll_type = 17 อสังหาริมทรัพย์อื่นๆ ที่ดินไม่ได้ใช้\r\n     \"buid_soi\" : \"\", // กรณีเลือก coll_type = 2 สิ่งปลูกสร้าง ที่ดินไม่ได้ใช้ \r\n     \"land_info\" : \"\", // เป็น field หลังบ้านไม่ได้ใช้\r\n     \"coll_branch\" : \"581\", // สาขาเจ้าของหลักประกัน\r\n     \"aprs_value_reason\" : \"\", // ใส่ในกรณีที่ apprisal value = 0 เป็นเหตุผลประกอบราคาประเมินใช้ในกรณีปลดจำนอง\r\n     \"land_no\" : \"856712\", //เลขที่โฉนด/นส.3ก./ตราจอง\r\n     \"coll_cost_center\" : \"200581\", //ศูนย์ต้นทุน\r\n     \"coll_response_unit\" : \"200581\", //หน่วยงานดูแลลูกค้า\r\n     \"land_volume_1\" : \"2\", // ไร่\r\n     \"land_volume_2\" : \"2\", // งาน\r\n     \"land_volume_3\" : \"60\", // ตรว.\r\n     \"land_volume_4\" : \"0\", // เศษ ตรว.\r\n     \"ravang\" : \"\", // เลขที่ดินไม่บังคับกรอก\r\n     \"land_value\" : \"500000\", // มูลค่าที่ดิน\r\n     \"build_value\" : \"\", // มูลค่าสิ่งปลูกสร้าง\r\n     \"partial_pledge_flag\" : \"\", // flag จำนองเฉพาะส่วน True/False\r\n     \"owner_portion\" : \"\", // สัดส่วนที่จำนอง\r\n     \"total_portion\" : \"\", // สัดส่วนทั้งหมด\r\n     \"own_land_volume_1\" : \"\", // ไร่\r\n     \"own_land_volume_2\" : \"\", // งาน\r\n     \"own_land_volume_3\" : \"\", // วา\r\n     \"guarantor_cif_no\" : \"\", // CIF บุคคลค้ำ ใช้ในกรณี coll_type 7 บุคคลค้ำ\r\n     \"build_type\" : \"\", // ประเภทสิ่งปลูกสร้าง:   1 - ที่อยู่อาศัย 2 - โรงงาน 3 - โรงแรม 4 - อพาร์ตเมนต์ 5 - โรงพยาบาล 6 - อาคารพาณิชย์ 7 - ทาวเฮาส์ 8 - อื่นๆ 9 - ไม้ยืนต้น 10 - ต้นไม้และสิ่งปลูกสร้าง  \r\n     \"number_of_floors\" : \"\", // กรณีเลือกเป็น coll_type = 8 คอนโดมิเนียม  \r\n     \"machine_reg_code_start\" : \"\", // ทะเบียนเครื่องจักร เลขเริ่มต้น\r\n     \"machine_reg_code_end\" : \"\",  // ทะเบียนเครื่องจักร เลขสิ้นสุด\r\n     \"engine_capacity\" : \"\", // สมรรถนะของหลักประกัน \r\n     \"unit_of_engine_capacity\" : \"\", // หน่วยวัดสมรรถนะของหลักประกัน:   1 - ตัน 2 - กิโลกรัม 3 - วัตต์ 4 - ปอนด์ 5 - แรงม้า 6 - บาร์ 7 - ซีซี 8 - ลิตร 9 - กิโลวัตต์(KW) 10 - มิลลิเมตร 11 - เมตร 12 - โวลต์ 13 - องศาเซลเซียส 14 - เข็ม/หัว 15 - ฝีเข็ม/นิ้ว 16 - เข็ม/นิ้ว 17 - ตัว/ครั้ง 18 - ลูกบาศก์เมตร/ชั่วโมง 19 - ชิ้น/ชั่วโมง 20 - แกน 21 - นิ้ว 22 - หัว (HEAD) 23 - มิลลิกรัม 24 - กรัม 25 - แท่ง/ครั้ง 26 - ถุง/ชั่วโมง 27 - RT 28 - ครั้ง 29 - เมตร x เมตร 30 - กิโลโวลต์-แอมแปร์ 31 - แบบ/ชั่วโมง 32 - หลา 33 - แกลลอน/ชั่วโมง 34 - กิโลกรัม/ตรซม.Kg/cm2 35 - บีทียู/ชั่วโมง 36 - กระป๋อง/นาที 37 - ลิตร/นาที 38 - กิโลแคลอรี่/ชม 39 - เมตร/นาที 40 - ตัน/ชั่วโมง 41 - ลบ.ม. 42 - ตัน/วัน 43 - เม็กกะวัตต์ (MW) 99 - ไม่ระบุหน่วยวัด  \r\n     \"purchase_price\" : \"\", // ราคาซื้อ\r\n     \"market_value_flag\" : \"\", // False flag ราคาตลาด\r\n     \"used_start_date\" : \"\", // วันที่เริ่มใช้งาน\r\n     \"use_age\" : \"\", // อายุการใช้งานคงเหลือ(ปี)\r\n     \"ruling_cost\" : \"\", // มูลค่าซาก\r\n     \"useful_life\" : \"\", // อายุการใช้งาน\r\n     \"account_no\" : \"\", // กรณีเลือก coll_type = 4 บัญชีเงินฝาก\r\n     \"bond_code\" : \"\", // * รหัสผู้ออกตราสาร:  001 - ธนาคารออมสิน 002 - ธนาคารอาคารสงเคราะห์ 003 - การทางพิเศษแห่งประเทศไทย 004 - กระทรวงการคลัง 005 - ธนาคารแห่งประเทศไทย 006 - การไฟฟ้าส่วนภูมิภาค 007 - การประปาส่วนภูมิภาค 008 - ธ.เพื่อการส่งออกและนำเข้าแห่งประเทศไทย 009 - การเคหะแห่งชาติ 010 - การไฟฟ้าฝ่ายผลิตแห่งประเทศไทย 011 - การปิโตเลียมแห่งประเทศไทย 012 - องค์การขนส่งมวลชนกรุงเทพ 013 - สถาบันบริหารกองทุนพลังงาน (องค์การมหาชน) 014 - การประปานครหลวง 015 - ธนาคารเพื่อการเกษตรและสหกรณ์การเกษตร กรณีเลือก coll_type = 5 - พันธบัตร\r\n     \"issuance_year\" : \"\", //ปีที่ออกตราสาร กรณีเลือก coll_type = 5 - พันธบัตร\r\n     \"bond_sequence\" : \"\", // ครั้งที่ออกตราสาร\r\n     \"bond_start_number\" : \"\", // เลขที่ตราสาร Start\r\n     \"bond_end_number\" : \"\",  // เลขที่ตราสาร Last\r\n     \"bond_type\" : \"\", // * ประเภทผู้ออกตราสาร:  1 - รัฐวิสาหกิจ 2 - รัฐวิสาหกิจที่กระทรวงการคลังค้ำประกัน 3 - ราชการ 4 - หลักทรัพย์รัฐบาลไทย 5 - ธนาคารแห่งประเทศไทย 6 - สลาก กรณีเลือก coll_type = 5 - พันธบัตร\r\n     \"bond_expire_date\" : \"\", // วันครบกำหนด\r\n     \"bond_int_rate\" : \"\", // อัตราดอกเบี้ย\r\n     \"bond_unit_price\" : \"\", // ราคาที่ตราไว้ต่อหน่วย\r\n     \"bond_owner_name\" : \"\", // ชื่อผู้ทรงตราสาร\r\n     \"notional_value\" : \"\", // ไม่ได้ใช้\r\n     \"total_bond_value\" : \"\", // มูลค่าตราสารตามราคาที่ตราไว้ คำนวณจาก ((bond_end_number -  bond_start_number) + 1) *  bond_unit_price\r\n     \"seniority\" : \"\", // บุริมสิทธิของตราสาร:   1 - Senior 2 - Subordinate  \r\n     \"symbol\" : \"\", // รหัสตราสาร\r\n     \"cer_no\" : \"\", // เลขทะเบียนผู้ออกใบหุ้น ใช้ในกรณี coll_type = 6\r\n     \"stock_issue_name\" : \"\", // ชื่อผู้ออกใบหุ้น:\r\n     \"stock_short_name\" : \"\", // ชื่อย่อของหุ้น:  AJ - บมจ.เอ.เจ.พลาสท์                        BANPU - บริษัท บ้านปู จำกัด (มหาชน)BBL - บมจ.ธนาคารกรุงเทพ                       BECL - บมจ.ทางด่วนกรุงเทพ                      BGH - บมจ.กรุงเทพดุสิตเวชการ                  BMCL - บมจ.รถไฟฟ้ากรุงเทพ                      CK - บมจ.ช.การช่าง CPF - บมจ.เจริญโภคภัณฑ์อาหาร                  DAIDO - บมจ.ไดโดมอน กรุ๊ปDCC - บมจ.ไดนาตี้เซรามิค                      EMC - บมจ.อีเอ็มซี ERAWAN - บริษัท ดิ เอราวัณ กรุ๊ป จำกัด (มหาชน)FNS - บมจ.ฟินันซ่า                            GRAMMY - บมจ.GMM Grammy                              GSTEEL - บมจ.จี สตีลIFEC - บมจ.อินเตอร์ ฟาร์อีสท์ วิศวการ          KBANK - บมจ.ธนาคารกสิกรไทย                      N-PARK - บมจ.แนเชอรัล พาร์ค                      NMG - บมจ.เนชั่น มัลติมีเดีย กรุ๊ป            PA - บมจ.แปซิฟิค แอสเซ็ทส์                       PF - บมจ.พร็อพเพอร์ตี้ เพอร์เฟค              PICNI - บมจ.ปิคนิค คอร์ปอเรชั่นPTT - บมจ. ปตท. SAMART - บมจ.สามารถคอร์ปอเรชั่น                  SAMTEL - บมจ.สามารถเทลคอม                        SCC - บมจ.ปูนซิเมนต์ไทย                       SIM - บมจ.สามารถ ไอ-โมบาย                     SIRI - บมจ. แสนสิริ                                 SMC - บมจ.เอสเอ็มซี มอเตอร์ส                  SMM - บมจ. สยามอินเตอร์มัลติมีเดียSSI - บมจ.สหวิริยาสตีลอินดัสตรี้STHAI - บมจ.ซันไทยอุตสาหกรรมถุงมือยาง           SUPER - บมจ.ซุปเปอร์บล๊อก                        SYNTEC - บมจ.ซินเท็คคอนสตรัคชั่น                     THAI - บมจ.การบินไทย                           TICON - บมจ.ไทคอน อินดัสเตรียล คอนเน็คชั่น      TRAF - บมจ.ทราฟฟิกคอร์นเนอร์ โฮลดิ้งส์ TRUE - บมจ.ทรู คอร์ปอเรชั่นTUCC - บมจ.ไทยยูนีคคอยล์เซ็นเตอร์               UOBAPF - กองทุนรวมอสังหาริมทรัพย์ ยูโอบีฯ        UST - บมจ.ยูไนเต็ด แสตนดาร์ด เทอร์มินัล       VAYU1 - กองทุนรวมวายุภักษ์ 1                     \r\n     \"stock_type\" : \"\", //ประเภทตราสาร:   1 - หุ้นสามัญ2 - หุ้นกู้3 - หุ้นบุริมสิทธิ์4 - ใบสำคัญแสดงสิทธิในการจองซื้อหุ้นสามัญ5 - ใบสำคัญแสดงสิทธิในการจองซื้อหุ้นกู้6 - หุ้นกู้แปลงสภาพ7 - หน่วยลงทุน  \r\n     \"listed_on_stock\" : \"\", // จดทะเบียนในตลาดรอง ใช้ในกรณี coll_type = 5,6\r\n     \"tax_id\" : \"\", //หมายเลขผู้เสียภาษี\r\n     \"shareholder_reg_no\" : \"\", // เลขทะเบียนผู้ออกใบหุ้น\r\n     \"stock_holder_name\" : \"\", // ชื่อผู้ถือหุ้น\r\n     \"stock_number\" : \"\", // เลขทะเบียนผู้ออกใบหุ้น\r\n     \"stock_issue_date\" : \"\", //วันที่ออกตราสาร\r\n     \"number_of_shares\" : \"\",  // จำนวนหุ้น\r\n     \"stock_par_price\" : \"\", // ราคาพาร์ต่อหน่วย\r\n     \"stock_par_date\" : \"\", // วันที่จดทะเบียนราคาพาร์\r\n     \"stock_book_price\" : \"\", // ราคาตามบัญชี \r\n     \"stock_book_date\" : \"\", // ราคาตลาด ณ วันที่ ใช้ในกรณี coll_type = 5,  ราคาตามบัญชี ณ วันที่ coll_type = 6\r\n     \"stock_market_price\" : \"\", // ราคาตลาดต่อหน่วย ใช้ในกรณี coll_type = 5,6\r\n     \"stock_market_date\" : \"\", // ราคาตลาด ณ วันที่\r\n     \"stock_issuer_risk_rate\" : \"\", // Stock Issuer Risk Rating\r\n     \"stock_risk_weight_of_collateral\" : \"\", // Stock Issuer Risk Rating\r\n     \"stock_holder_ratio\" : \"\",// Stock Holder Ratio\r\n     \"room_no\" : \"\",\r\n     \"build_reg_no\" : \"\",\r\n     \"build_storey\" : \"\",\r\n     \"build_no\" : \"\",\r\n     \"build_name\" : \"\",\r\n     \"room_area\" : \"\",\r\n     \"concession_contract_rights_no\" : \"\",\r\n     \"concession_contract_rights_date\" : \"\",\r\n     \"rights_value\" : \"\",\r\n     \"date_of_transfer\" : \"\",\r\n     \"rights_balance\" : \"\",\r\n     \"as_of_lease_loan_date\" : \"\",\r\n     \"company_or_government_name\" : \"\",\r\n     \"branch_of_trafer_rights\" : \"\",\r\n     \"type_of_commudity\" : \"\",\r\n     \"insurance_capital_price\" : \"\",\r\n     \"insurance_market_price\" : \"\",\r\n     \"firstclass_insurance_flag\" : \"\",\r\n     \"rental_agreement_reg_no\" : \"\",\r\n     \"rental_agreement_issuer\" : \"\",\r\n     \"rental_agreement_type\" : \"\",\r\n     \"rental_agreement_expire_date\" : \"\",\r\n     \"rental_agreement_duration\" : \"\",\r\n     \"asset_to_equity_agreement_no\" : \"\",\r\n     \"asset_to_equity_agreement_issuer\" : \"\",\r\n     \"asset_to_equity_agreement_issue_date\" : \"\",\r\n     \"asset_to_equity_agreement_expire_date\" : \"\",\r\n     \"lg_no\" : \"\",\r\n     \"lg_issue_date\" : \"\",\r\n     \"salak_account_no\" : \"\",\r\n     \"cert_no\" : \"\",\r\n     \"lottery_low_no\" : \"\",\r\n     \"lottery_high_no\" : \"\",\r\n     \"salak_group\" : \"\",\r\n     \"salak_period\" : \"\",\r\n     \"lottery_unit\" : \"\",\r\n     \"cert_balance\" : \"\",\r\n     \"cert_record_no\" : \"\",\r\n     \"exeed_present_value\" : \"\",\r\n     \"total_present_value\" : \"\",\r\n     \"pawn_no\" : \"\",\r\n     \"pawn_weight\" : \"\",\r\n     \"pawn_product_code\" : \"\",\r\n     \"pawn_product_type\" : \"\",\r\n     \"pawn_product_kind\" : \"\",\r\n     \"pawn_cif\" : \"\",\r\n     \"pawn_storage_date_end\" : \"\",\r\n     \"pawn_company\" : \"\",\r\n     \"ticket_type\" : \"\",\r\n     \"ticket_no\" : \"\",\r\n     \"ticket_issuer\" : \"\",\r\n     \"ticket_date\" : \"\",\r\n     \"ticket_due_date\" : \"\",\r\n     \"document_date\" : \"\",\r\n     \"land_doc_subtype\" : \"\",\r\n     \"ground_no\" : \"\",\r\n     \"book_no\" : \"\",\r\n     \"page_no\" : \"\",\r\n     \"custom_enddate_collateral_date\":\"2027-01-31\",\r\n     \"seq_no\" : \"\",\r\n     \"user_id\" : \"1\",\r\n     \"created_branch\" : \"581\",\r\n     \"appraisal_officer_1\":\"\", //ผู้ประเมินราคา 1 เฉพาะ coll_type = 1,2,3,8,15,17,99\r\n     \"appraisal_officer_2\":\"\", //ผู้ประเมินราคา 2 เฉพาะ coll_type = 1,2,3,8,15,17,99\r\n     \"appraisal_officer_3\":\"\" //ผู้ประเมินราคา 3 เฉพาะ coll_type = 1,2,3,8,15,17,99\r\n    }\r\n}\r\n\r\n/*======================================================\r\nCollateral Type:   1 - ที่ดิน/ที่ดินพร้อมสิ่งปลูกสร้าง/ที่ดินพร้อมต้นไม้ 2 - สิ่งปลูกสร้าง 3 - เครื่องจักร 4 - บัญชีเงินฝาก 5 - พันธบัตร 6 - ใบหุ้น 7 - บุคคล/นิติบุคคลค้ำ 8 - คอนโดมีเนียม/ห้องชุด 9 - โอนสิทธิเรียกร้องการรับเงิน 10 - รถยนต์/รถจักรยานยนต์ 11 - สิทธิการเช่า 12 - สิทธิการแปลงสินทรัพย์เป็นทุน 13 - หนังสือค้ำประกัน 14 - สลาก 15 - จำนำผลิตผลการเกษตร 16 - ตั๋วเงิน 17 - อสังหาริมทรัพย์อื่นๆ 99 - อื่นๆ  \r\n*/\r\n/*======================================================\r\nCollateral Type: 1 - ที่ดิน/ที่ดินพร้อมสิ่งปลูกสร้าง/ที่ดินพร้อมต้นไม้\r\n======================================================\r\nSub Type:  \r\n1 - โฉนด\r\n2 - นส3ก\r\n3 - ตราจอง\r\n4 - นส3\r\n5 - นส 3 ข\r\nbot_coll_code (รหัสหลักประกันธนาคารแห่งประเทศไทย) :   \r\n286003 - ที่ดิน\r\nsub_bot_coll_code (รหัสหลักประกันย่อย):  \r\n0 - ที่ดินเปล่า\r\n1 - แผงค้า\r\n2 - พื้นที่ในห้างสรรพสินค้า  \r\n\r\n286006 - ที่ดินพร้อมสิ่งปลูกสร้าง\r\nsub_bot_coll_code (รหัสหลักประกันย่อย):  \r\n0 - ที่ดินพร้อมสิ่งปลูกสร้าง\r\n1 - แผงค้า\r\n2 - พื้นที่ในห้างสรรพสินค้า\r\n\r\n286008 - อื่นๆ ที่เกี่ยวกับที่ดินและสิ่งปลูกสร้าง  \r\nsub_bot_coll_code (รหัสหลักประกันย่อย):  \r\n0 - ที่ดินและอื่นๆ\r\n1 - ต้นไม้\r\n2 - ไม้ยืนต้น\r\n3 - แผงค้า\r\n4 - พื้นที่ในห้างสรรพสินค้า \r\n*/",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://soagwuat.kube.baac.or.th:8543/LPSWS-cbsiuat/service/v1/collaterals/create",
+          "protocol": "https",
+          "host": [
+            "soagwuat",
+            "kube",
+            "baac",
+            "or",
+            "th"
+          ],
+          "port": "8543",
+          "path": [
+            "LPSWS-cbsiuat",
+            "service",
+            "v1",
+            "collaterals",
+            "create"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "7-createCollateralOwner",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": " application/json",
+            "type": "text"
+          },
+          {
+            "key": "x-request-id",
+            "value": "111111111111",
+            "type": "text"
+          },
+          {
+            "key": "x-real-ip",
+            "value": "1.1.1.1",
+            "type": "text"
+          },
+          {
+            "key": "x-application",
+            "value": "TEST",
+            "type": "text"
+          },
+          {
+            "key": "user-agent",
+            "value": "HTTP",
+            "type": "text"
+          },
+          {
+            "key": "datetime",
+            "value": "2023-03-02T13:15:04+07:00",
+            "type": "text"
+          },
+          {
+            "key": "accept_language",
+            "value": "EN",
+            "type": "text"
+          },
+          {
+            "key": "accept_encoding",
+            "value": "utf-8",
+            "type": "text"
+          },
+          {
+            "key": "x-job-id",
+            "value": "17ca7891-7325-424a-b8e3-37b460f5b8d3",
+            "type": "text"
+          },
+          {
+            "key": "x-caller-service",
+            "value": "aa",
+            "type": "text"
+          },
+          {
+            "key": "x-caller-domain",
+            "value": "bb",
+            "type": "text"
+          },
+          {
+            "key": "accept",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "x-device",
+            "value": "cc",
+            "type": "text"
+          },
+          {
+            "key": "x-channel",
+            "value": "lps",
+            "type": "text"
+          },
+          {
+            "key": "original-caller-domain",
+            "value": "10",
+            "type": "text"
+          },
+          {
+            "key": "requested-service",
+            "value": "createCollateralOwner",
+            "type": "text"
+          },
+          {
+            "key": "requested-service-version",
+            "value": "v1",
+            "type": "text"
+          },
+          {
+            "key": "x-api-key",
+            "value": "LpNlBmZghzQvnFyyB5YT5i19oMydU7GU",
+            "type": "text"
+          },
+          {
+            "key": "apikey",
+            "value": "7fSa4cWbMD9GxaDXyMYdileogJGl7GRa",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"rqBody\": {\r\n     \"coll_id\" : \"15880\",\r\n     \"customer_id\" : \"18852\",\r\n     \"partial_pledge_owner_flag\" : \"false\",\r\n     \"user_id\" : \"1\",\r\n     \"created_branch\" : \"581\"\r\n    }\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://soagwuat.kube.baac.or.th:8543/LPSWS-cbsiuat/service/v1/collaterals/customers/create",
+          "protocol": "https",
+          "host": [
+            "soagwuat",
+            "kube",
+            "baac",
+            "or",
+            "th"
+          ],
+          "port": "8543",
+          "path": [
+            "LPSWS-cbsiuat",
+            "service",
+            "v1",
+            "collaterals",
+            "customers",
+            "create"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
