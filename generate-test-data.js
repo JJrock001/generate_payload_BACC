@@ -306,7 +306,7 @@ const collBase = (collType, botCode, subBotCode, contractDate) => ({
   seq_no: '',
   user_id: '1',
   created_branch: BRANCH_CODE,
-  appraisal_officer_1: `นาย ${pick(THAI_LAST)} ${pick(THAI_FIRST)}`,
+  appraisal_officer_1: `${pick(['นาย','นาง','นางสาว'])} ${pick(THAI_LAST)} ${pick(THAI_FIRST)}`,
   appraisal_officer_2: '',
   appraisal_officer_3: ''
 });
@@ -401,8 +401,8 @@ const buildCollateral = (collType, botCode, rawBotStr, accTypeStr, existingAprs,
         aprs_value: aprsValue,
         machine_reg_code_start: `${codeStart}`,
         machine_reg_code_end:   `${codeStart + rand(2, 5)}`,
-        engine_capacity:         '100',   // ← fixed ตาม HTML comment
-        unit_of_engine_capacity: '1',     // ← fixed ตาม HTML comment
+        engine_capacity:         100,   // ← number ตาม HTML (ไม่ใช่ string)
+        unit_of_engine_capacity: 1,     // ← number ตาม HTML (ไม่ใช่ string)
         purchase_price:          `${purchasePrice}`,
         used_start_date:          today(), // ← ตาม HTML: now()
         use_age:                 `${useAge}`,
@@ -441,7 +441,7 @@ const buildCollateral = (collType, botCode, rawBotStr, accTypeStr, existingAprs,
         bond_expire_date:   futureDate(rand(minYrs, maxYrs)),  // ← field bond_expire_date
         bond_int_rate:      `${rand(1, 10)}`,
         bond_unit_price:    `${unitPrice}`,
-        bond_owner_name:    `${pick(THAI_FIRST)} ${pick(THAI_LAST)}`,
+        bond_owner_name:    `เจ้าของพันธบัตร ${rand(1, 999)}`,
         total_bond_value:   `${totalBond}`,  // (bondEnd-bondStart+1) × unitPrice
         stock_book_date:    today(),
         stock_market_price: '500',           // ← default ตาม HTML
@@ -459,7 +459,7 @@ const buildCollateral = (collType, botCode, rawBotStr, accTypeStr, existingAprs,
       overrides = {
         coll_subtype: '0',
         bot_coll_code: s8BotCode,
-        sub_bot_coll_code: '0',
+        sub_bot_coll_code: '',   // ← "" ตาม HTML (Type 8 ไม่มี sub_bot options)
         room_no:      `${rand(1, 999)} / ${rand(1, 999)}`,
         build_reg_no: `${rand(1, 100)}`,
         build_storey: `${rand(1, 10)}`,         // ตาม HTML: randomInt(1,10)
@@ -551,7 +551,7 @@ const buildCollateral = (collType, botCode, rawBotStr, accTypeStr, existingAprs,
       overrides = {
         coll_subtype:           '0',
         bot_coll_code:          isShip ? '286039' : '286214',
-        sub_bot_coll_code:      '0',
+        sub_bot_coll_code:      '',   // ← "" ตาม HTML (Type 99 ไม่มี sub_bot options)
         collateral_description: isShip ? 'เรือประมง' : 'สินค้าคงคลัง',
         type_of_commudity:      isShip ? '' : commudity,
         aprs_value:             aprsValue
