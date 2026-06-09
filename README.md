@@ -41,20 +41,29 @@ node generate-test-data.js
 
 ---
 
-### Step 2 — ตั้งค่า Postman Collection
+### Step 2 — โครงสร้าง Postman Collection
 
-ใน Postman ต้องมี **4 requests** เรียงตามลำดับนี้ใน folder เดียวกัน:
+Collection มี **7 requests** แต่เราใช้แค่ **5 requests** (skip 4-updateCustomerRegistration และ 5-updatePersonalCustomer):
 
 ```
-📁 CBS Collateral Test
-  ├── 1. Create Customer          POST  {{base_url}}/v1/customers/personal/create
-  ├── 2. Create Registration      POST  {{base_url}}/v1/customers/registration/create
-  ├── 3. Create Collateral        POST  {{base_url}}/v1/collaterals/create
-  └── 4. Create Collateral Owner  POST  {{base_url}}/v1/collaterals/customers/create
+📁 CreateDataCBS
+  ├── 1-createPersonalCustomer       POST  .../v1/customers/personal/create
+  ├── 2-createCorporateCustomer      POST  .../v1/customers/corporate/create
+  ├── 3-createCustomerRegistration   POST  .../v1/customers/registration/create
+  ├── 4-updateCustomerRegistration   ← SKIP (ไม่ใช้ในขั้นตอนนี้)
+  ├── 5-updatePersonalCustomer       ← SKIP (ไม่ใช้ในขั้นตอนนี้)
+  ├── 6-createCollateral คำอธิบาย   POST  .../v1/collaterals/create
+  └── 7-createCollateralOwner        POST  .../v1/collaterals/customers/create
 ```
+
+**Flow ต่อ 1 iteration:**
+- **Personal** (603, 600): รัน 1 → skip 2 → รัน 3 → skip 4,5 → รัน 6 → รัน 7
+- **Corporate** (500, 707, 709 ฯลฯ): skip 1 → รัน 2 → รัน 3 → skip 4,5 → รัน 6 → รัน 7
+
+> `postman.setNextRequest()` จะทำการ skip request ที่ไม่ต้องการอัตโนมัติ
 
 ตั้งค่า Environment variable:
-- `base_url` = URL ของ banking server (เช่น `http://your-server:8080`)
+- `base_url` = base URL ของ banking server (เช่น `https://soagwuat.kube.baac.or.th:8543/LPSWS-cbsiuat/service`)
 
 ---
 
@@ -64,32 +73,57 @@ node generate-test-data.js
 
 ---
 
-#### Request 1: Create Customer
+#### Request 1: `1-createPersonalCustomer`
 
 **Pre-request Script:**
 ```javascript
-const apiType = pm.iterationData.get("customer_api_type");
-const body    = JSON.parse(pm.iterationData.get("create_customer_body"));
+// ถ้าเป็น corporate ให้ข้ามไป request 2 เลย
+if (pm.iterationData.get("customer_api_type") !== "personal") {
+    postman.setNextRequest("2-createCorporateCustomer");
+    return;
+}
+const body = JSON.parse(pm.iterationData.get("create_customer_body"));
 pm.request.body.update({ mode: "raw", raw: JSON.stringify(body) });
-
-const baseUrl = pm.environment.get("base_url");
-pm.request.url = apiType === "personal"
-  ? baseUrl + "/v1/customers/personal/create"
-  : baseUrl + "/v1/customers/corporate/create";
 ```
 
 **Tests:**
 ```javascript
+if (pm.iterationData.get("customer_api_type") !== "personal") return;
 const res = pm.response.json();
 // ⚠️ ปรับ path ให้ตรงกับ response จริงของ API
 const cif = res?.data?.customer_id || res?.customerId || res?.cif || "";
 pm.environment.set("current_cif", cif);
-pm.test("Customer created", () => pm.expect(cif).to.not.be.empty);
+pm.test("Personal Customer created", () => pm.expect(cif).to.not.be.empty);
 ```
 
 ---
 
-#### Request 2: Create Registration
+#### Request 2: `2-createCorporateCustomer`
+
+**Pre-request Script:**
+```javascript
+// ถ้าเป็น personal ให้ข้ามไป request 3 เลย
+if (pm.iterationData.get("customer_api_type") !== "corporate") {
+    postman.setNextRequest("3-createCustomerRegistration");
+    return;
+}
+const body = JSON.parse(pm.iterationData.get("create_customer_body"));
+pm.request.body.update({ mode: "raw", raw: JSON.stringify(body) });
+```
+
+**Tests:**
+```javascript
+if (pm.iterationData.get("customer_api_type") !== "corporate") return;
+const res = pm.response.json();
+// ⚠️ ปรับ path ให้ตรงกับ response จริงของ API
+const cif = res?.data?.customer_id || res?.customerId || res?.cif || "";
+pm.environment.set("current_cif", cif);
+pm.test("Corporate Customer created", () => pm.expect(cif).to.not.be.empty);
+```
+
+---
+
+#### Request 3: `3-createCustomerRegistration`
 
 **Pre-request Script:**
 ```javascript
@@ -101,11 +135,13 @@ pm.request.body.update({ mode: "raw", raw: JSON.stringify(body) });
 **Tests:**
 ```javascript
 pm.test("Registration created", () => pm.response.to.have.status(200));
+// ข้าม 4-updateCustomerRegistration และ 5-updatePersonalCustomer
+postman.setNextRequest("6-createCollateral คำอธิบาย");
 ```
 
 ---
 
-#### Request 3: Create Collateral
+#### Request 6: `6-createCollateral คำอธิบาย`
 
 **Pre-request Script:**
 ```javascript
@@ -124,7 +160,7 @@ pm.test("Collateral created", () => pm.expect(collId).to.not.be.empty);
 
 ---
 
-#### Request 4: Create Collateral Owner
+#### Request 7: `7-createCollateralOwner`
 
 **Pre-request Script:**
 ```javascript
@@ -154,14 +190,14 @@ pm.test("Owner created", () => pm.response.to.have.status(200));
 
 ### Step 4 — รัน Collection Runner
 
-1. เปิด **Postman → Collections** → เลือก folder ที่มี 4 requests
+1. เปิด **Postman → Collections** → เลือก collection **CreateDataCBS**
 2. คลิก **Run** (Collection Runner)
 3. ในหน้า Runner:
    - **Iterations**: `246`
    - **Data**: คลิก **Select File** → เลือก `postman-data.json`
-4. คลิก **Run CBS Collateral Test**
+4. คลิก **Run CreateDataCBS**
 
-> Postman จะรัน 4 APIs ต่อ 1 iteration โดยอัตโนมัติ และ chain CIF / coll_id ระหว่าง requests
+> Postman จะ skip request 4 และ 5 อัตโนมัติผ่าน `setNextRequest` และ chain CIF / coll_id ระหว่าง requests
 
 ---
 
@@ -179,8 +215,8 @@ pm.test("Owner created", () => pm.response.to.have.status(200));
 | Column | แหล่งที่มา |
 |---|---|
 | `seq` | หมายเลขลำดับจาก Planning CSV |
-| `cif` | ได้จาก API response (Create Customer) |
-| `coll_id` | ได้จาก API response (Create Collateral) |
+| `cif` | ได้จาก API response (Request 1 หรือ 2) |
+| `coll_id` | ได้จาก API response (Request 6) |
 | `aprs_value` | ราคาประเมินรวม (pre-generated) |
 | `contract_date` | วันหมดอายุสัญญาเงินกู้ (pre-generated) |
 
@@ -191,7 +227,7 @@ pm.test("Owner created", () => pm.response.to.have.status(200));
 | Type | ประเภท | BOT Code | จำนวน Test Cases |
 |---|---|---|---|
 | 1 | ที่ดิน | 286003, 286006 | 30 |
-| 2 | สิ่งปลูกสร้าง | 286004, 286006 | 30 |
+| 2 | สิ่งปลูกสร้าง | 286004, 286008 | 30 |
 | 3 | เครื่องจักร | 286011 | 15 |
 | 4 | บัญชีเงินฝาก | — | **Skip** |
 | 5 | พันธบัตร | 286018 | 50 |
@@ -208,4 +244,5 @@ pm.test("Owner created", () => pm.response.to.have.status(200));
 
 - **Type 4 (บัญชีเงินฝาก)**: ต้องสร้างบัญชีจริงและฝากเงินในระบบธนาคารก่อน จึงต้องทดสอบแยกด้วยตนเอง
 - **rows 1–30**: มี CIF และ coll_id กำหนดไว้แล้วใน Planning CSV (สร้างไว้ก่อนหน้า)
-- **Response path**: ตรวจสอบ path ของ `customer_id` และ `coll_id` ใน API response จริงก่อนรัน แล้วแก้ไขใน Test Scripts ของ Request 1 และ 3
+- **Request name ต้องตรงทุกตัวอักษร**: `postman.setNextRequest()` ใช้ชื่อ request ตรงตัว เช่น `"6-createCollateral คำอธิบาย"` (มีเว้นวรรคและภาษาไทย)
+- **Response path**: ตรวจสอบ path ของ `customer_id` และ `coll_id` ใน API response จริงก่อนรัน แล้วแก้ไขใน Test Scripts ของ Request 1/2 และ 6
