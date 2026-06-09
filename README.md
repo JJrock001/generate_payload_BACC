@@ -50,7 +50,7 @@ node generate-test-data.js
   ├── 1. Create Customer          POST  {{base_url}}/v1/customers/personal/create
   ├── 2. Create Registration      POST  {{base_url}}/v1/customers/registration/create
   ├── 3. Create Collateral        POST  {{base_url}}/v1/collaterals/create
-  └── 4. Create Collateral Owner  POST  {{base_url}}/v1/collateral-owners/create
+  └── 4. Create Collateral Owner  POST  {{base_url}}/v1/collaterals/customers/create
 ```
 
 ตั้งค่า Environment variable:

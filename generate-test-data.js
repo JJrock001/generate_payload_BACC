@@ -79,9 +79,10 @@ const cleanAmount = str => {
   return str.replace(/,/g,'').replace(/\.00\s*$/,'').trim() || null;
 };
 
-const genAddr = () => {
+// includeHousehold = true เฉพาะ personal permanent_address เท่านั้น (ตาม Postman collection)
+const genAddr = (includeHousehold = false) => {
   const prov = pick(PROVINCES), dist = pick(DISTRICTS), sub = pick(SUB_DISTRICTS);
-  return {
+  const addr = {
     address1: `ที่อยู่ทดสอบ ${rand(1,999)}`,
     address2: `หมู่บ้าน ${pick(THAI_FIRST)}`,
     address3: `ถนน ${pick(THAI_LAST)}`,
@@ -91,9 +92,10 @@ const genAddr = () => {
     province: prov,
     district: dist,
     sub_district: sub,
-    zip: `${prov}${rand(100,999)}`,
-    house_hold_number: `${rand(1,99)}`
+    zip: `${prov}${rand(100,999)}`
   };
+  if (includeHousehold) addr.house_hold_number = `${rand(1,99)}`;
+  return addr;
 };
 
 const genRegAddr = () => {
@@ -121,9 +123,9 @@ const buildPersonal = (custType, idx) => ({
   english_first_name: pick(EN_FIRST),
   english_middle_name: '',
   english_last_name: pick(EN_LAST),
-  permanent_address: genAddr(),
-  mailing_address: genAddr(),
-  office_address: genAddr(),
+  permanent_address: genAddr(true),   // ← house_hold_number เฉพาะ permanent เท่านั้น
+  mailing_address:   genAddr(false),
+  office_address:    genAddr(false),
   date_of_birth: genDate(1960, 2000),
   date_of_birth_code: '1',
   date_of_death: '',
@@ -757,7 +759,7 @@ Your Postman collection needs 4 requests in this order:
   1. Create Customer  (POST /v1/customers/personal/create  OR  /corporate/create)
   2. Create Registration  (POST /v1/customers/registration/create)
   3. Create Collateral  (POST /v1/collaterals/create)
-  4. Create Collateral Owner  (POST /v1/collateral-owners/create)
+  4. Create Collateral Owner  (POST /v1/collaterals/customers/create)
 
 ── Request 1 · PRE-REQUEST SCRIPT ──────────────────
 const apiType = pm.iterationData.get("customer_api_type");
