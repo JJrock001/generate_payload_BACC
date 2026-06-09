@@ -140,7 +140,7 @@ const buildPersonal = (custType, idx) => ({
   mobile_phone: `08${rand(10000000,99999999)}`,
   office_phone: `02${rand(1000000,9999999)}`,
   office_phone_ext: '', fax_phone: '',
-  email: `testuser${idx}@baac.test`,
+  email: `tester${rand(1, 999)}@gmail.com`,
   customer: custType,
   employee_id: '',
   citizen_card: {
@@ -164,7 +164,7 @@ const buildCorporate = (custType, idx) => ({
   mailing_address: genAddr(),
   office_address: genAddr(),
   business_info: {
-    establish_objective: 'ทดสอบระบบ CBS',
+    establish_objective: 'ทดสอบระบบ',
     nationality: 'TH', residency: 'TH',
     total_assets: `${rand(1,50)}000000.00`,
     liability: '0.00',
@@ -185,7 +185,7 @@ const buildCorporate = (custType, idx) => ({
     factory_phone: `02${rand(1000000,9999999)}`, factory_phone_ext: '222',
     mobile_phone: `08${rand(10000000,99999999)}`,
     fax_phone: `02${rand(1000000,9999999)}`,
-    email: `corp${idx}@baac.test`
+    email: `corp${rand(1, 999)}@gmail.com`
   },
   BOT_info: {
     tax_id: genCitizenId(), bot_assigned_code: '456', boi_flag: 'false',
@@ -207,7 +207,7 @@ const buildCorporate = (custType, idx) => ({
     group_product_name: 'Test', group_common_occupation: '7',
     group_establish_date: genDate(2015, 2020),
     group_establish_member: '10', group_current_member: '100',
-    group_objective: 'ทดสอบ CBS'
+    group_objective: 'ทดสอบ 111'
   },
   branch_code: BRANCH_CODE,
   user_id: '1'
