@@ -329,14 +329,20 @@ const buildCollateral = (collType, botCode, rawBotStr, accTypeStr, existingAprs,
   switch (collType) {
 
     // ── Type 1: ที่ดิน ────────────────────────────────────────────────────
+    // aprs_value = land_value + build_value (HTML คำนวณ sum เอง)
     case '1': {
-      const landVal = aprsValue
-        ? (botCode === '286006' ? Math.round(parseInt(aprsValue) * 0.65) : parseInt(aprsValue))
-        : rand(2, 50) * 1000000;
-      const buildVal = (botCode === '286006')
-        ? (aprsValue ? Math.round(parseInt(aprsValue) * 0.35) : rand(1, 10) * 100000)
-        : '';
-      aprsValue = aprsValue || `${landVal + (parseInt(buildVal)||0)}`;
+      // ถ้ามี aprs_value จาก CSV ให้ split เป็น land + build
+      // 286006 (ที่ดิน+สิ่งปลูกสร้าง): land ~65%, build ~35%
+      // 286003 (ที่ดินเปล่า): land = 100%
+      const totalAprs = aprsValue ? parseInt(aprsValue) : rand(2, 50) * 1000000;
+      const landVal  = botCode === '286006'
+        ? Math.round(totalAprs * 0.65)
+        : totalAprs;
+      const buildVal = botCode === '286006'
+        ? Math.round(totalAprs * 0.35)
+        : 0;
+      // aprs_value = land_value + build_value (ตาม HTML)
+      aprsValue = `${landVal + buildVal}`;
 
       overrides = {
         coll_subtype: '1',
@@ -345,6 +351,7 @@ const buildCollateral = (collType, botCode, rawBotStr, accTypeStr, existingAprs,
         land_volume_2: `${rand(0, 3)}`,
         land_volume_3: `${rand(0, 99)}`,
         land_volume_4: '0',
+        ravang: '',
         land_value: `${landVal}`,
         build_value: buildVal ? `${buildVal}` : '',
         ...(botCode === '286006' ? { build_type: `${rand(1, 7)}` } : {})
@@ -353,14 +360,20 @@ const buildCollateral = (collType, botCode, rawBotStr, accTypeStr, existingAprs,
     }
 
     // ── Type 2: สิ่งปลูกสร้าง ────────────────────────────────────────────
+    // bot_coll_code ของ Type 2 คือ 286004 (อาคาร) หรือ 286008 (อื่นๆ) เท่านั้น
     case '2': {
-      aprsValue = aprsValue || `${rand(5, 50) * 100000}`;
-      // ไม้ยืนต้น → build_type 9, อื่นๆ → random 1-8 excl 8
+      aprsValue = aprsValue || `${rand(2, 50) * 100000}`;
+      // ดึง bot_coll_code จาก rawBotStr: 286004=อาคาร, 286006=อื่นๆ → map เป็น 286008
+      const s2BotCode = rawBotStr.includes('286004') ? '286004' : '286008';
+      // sub_bot สำหรับ 286008: ไม้ยืนต้น=2, อื่นๆ=0
+      const s2SubBot  = s2BotCode === '286008'
+        ? (rawBotStr.includes('ไม้ยืนต้น') ? '2' : '0')
+        : '0';
+      // build_type: ไม้ยืนต้น→9, อื่นๆ random 1-7
       const buildType = rawBotStr.includes('ไม้ยืนต้น') ? '9' : `${rand(1, 7)}`;
-      // sub_bot: 286006(อื่นๆ) → 0-ที่ดิน, 286004 → 0
-      const s2SubBot = rawBotStr.includes('286006') ? (rawBotStr.includes('ไม้ยืนต้น') ? '2' : '0') : '0';
+
       overrides = {
-        bot_coll_code: botCode,
+        bot_coll_code: s2BotCode,
         sub_bot_coll_code: s2SubBot,
         build_no: `${rand(1, 999)}`,
         build_type: buildType,
@@ -370,56 +383,68 @@ const buildCollateral = (collType, botCode, rawBotStr, accTypeStr, existingAprs,
     }
 
     // ── Type 3: เครื่องจักร ──────────────────────────────────────────────
+    // engine_capacity = 100 (fixed), unit_of_engine_capacity = 1 (fixed) ← ตาม HTML
     case '3': {
-      aprsValue = aprsValue || `${rand(5, 50) * 100000}`;
-      const codeStart = rand(1, 99999);
-      const usefulLife = rand(15, 40);
+      aprsValue = aprsValue || `${rand(2, 50) * 100000}`;
+      const aprsNum    = parseInt(aprsValue);
+      const codeStart  = rand(1, 99999);
+      const usefulLife = rand(10, 99);               // ตาม HTML: randomInt(10, 99)
+      const useAge     = rand(1, usefulLife - 5);
+      // purchase_price = close to aprs ±5%, ruling_cost = close ±3% (ตาม getCloseMoneyValue)
+      const purchasePrice = Math.round(aprsNum * (1 + (rand(-5, 5) / 100)));
+      const rulingCost    = Math.round(aprsNum * (1 + (rand(-3, 3) / 100)));
+
       overrides = {
-        sub_bot_coll_code: subBot,
+        sub_bot_coll_code: subBot,   // 0=มีเลขทะเบียน, 1=ไม่มีเลขทะเบียน, 2=ใบสั่งซื้อ
         aprs_value: aprsValue,
         machine_reg_code_start: `${codeStart}`,
-        machine_reg_code_end: `${codeStart + rand(1, 5)}`,
-        engine_capacity: '100',
-        unit_of_engine_capacity: '1',
-        purchase_price: `${Math.round(parseInt(aprsValue) * 1.05)}`,
-        used_start_date: today(),
-        use_age: `${rand(1, usefulLife - 5)}`,
-        ruling_cost: `${Math.round(parseInt(aprsValue) * 0.97)}`,
-        useful_life: `${usefulLife}`
+        machine_reg_code_end:   `${codeStart + rand(2, 5)}`,
+        engine_capacity:         '100',   // ← fixed ตาม HTML comment
+        unit_of_engine_capacity: '1',     // ← fixed ตาม HTML comment
+        purchase_price:          `${purchasePrice}`,
+        used_start_date:          today(), // ← ตาม HTML: now()
+        use_age:                 `${useAge}`,
+        ruling_cost:             `${rulingCost}`,
+        useful_life:             `${usefulLife}`
       };
       break;
     }
 
     // ── Type 5: พันธบัตร ─────────────────────────────────────────────────
+    // aprs_value = (bondEnd - bondStart + 1) × bondUnitPrice (ตาม HTML)
+    // bond_expire_date คำนวณจาก range ที่อยู่ใน accTypeStr column
     case '5': {
-      // Parse expiry range from accTypeStr: "(1) ผู้กู้ 4-8 ปี"
+      // Parse expiry range จาก accTypeStr: "(1) ผู้กู้ 4-8 ปี"
       let minYrs = 0, maxYrs = 4;
-      if (accTypeStr.includes('4-8'))       { minYrs = 4;  maxYrs = 8;  }
+      if      (accTypeStr.includes('4-8'))  { minYrs = 4;  maxYrs = 8;  }
       else if (accTypeStr.includes('8-12')) { minYrs = 8;  maxYrs = 12; }
       else if (accTypeStr.includes('12-16')){ minYrs = 12; maxYrs = 16; }
       else if (accTypeStr.includes('>16') || accTypeStr.includes('16-')) { minYrs = 16; maxYrs = 30; }
 
-      const bondStart = 1, bondEnd = 100, unitPrice = 1000;
-      const totalBond = (bondEnd - bondStart + 1) * unitPrice;
-      aprsValue = aprsValue || `${totalBond}`;
+      const bondStart   = 1;
+      const bondEnd     = 100;
+      const unitPrice   = 1000;
+      const totalBond   = (bondEnd - bondStart + 1) * unitPrice; // = 100,000
+      // aprs_value = total_bond_value (ตาม HTML formula)
+      aprsValue = `${totalBond}`;
 
       overrides = {
         coll_subtype: '0',
-        bond_code: '001',
-        issuance_year: `${new Date().getFullYear()}`,
-        bond_sequence: '1',
-        bond_start_number: `${bondStart}`,
-        bond_end_number: `${bondEnd}`,
-        bond_type: '5',
-        bond_expire_date: futureDate(rand(minYrs, maxYrs)),
-        bond_int_rate: `${rand(1, 10)}`,
-        bond_unit_price: `${unitPrice}`,
-        bond_owner_name: `เจ้าของพันธบัตร ${rand(1, 999)}`,
-        total_bond_value: `${totalBond}`,
-        stock_book_date: today(),
-        stock_market_price: '500',
-        stock_market_date: today(),
-        aprs_value: aprsValue
+        bond_code:          '001',
+        issuance_year:      `${new Date().getFullYear()}`,
+        bond_sequence:      '1',
+        bond_start_number:  `${bondStart}`,
+        bond_end_number:    `${bondEnd}`,
+        bond_type:          '5',
+        bond_expire_date:   futureDate(rand(minYrs, maxYrs)),  // ← field bond_expire_date
+        bond_int_rate:      `${rand(1, 10)}`,
+        bond_unit_price:    `${unitPrice}`,
+        bond_owner_name:    `${pick(THAI_FIRST)} ${pick(THAI_LAST)}`,
+        total_bond_value:   `${totalBond}`,  // (bondEnd-bondStart+1) × unitPrice
+        stock_book_date:    today(),
+        stock_market_price: '500',           // ← default ตาม HTML
+        stock_market_date:  today(),
+        aprs_value:         aprsValue
       };
       break;
     }
@@ -427,19 +452,19 @@ const buildCollateral = (collType, botCode, rawBotStr, accTypeStr, existingAprs,
     // ── Type 8: คอนโด/อาคารชุด ──────────────────────────────────────────
     case '8': {
       aprsValue = aprsValue || `${rand(10, 80) * 100000}`;
-      // 286008 อาคารชุด vs 286008 อื่นๆ
+      // 286008 อาคารชุด → bot = 286066, อื่นๆ → 286008 (ตาม HTML BOT_COLL_CODE_OPTIONS_8)
       const s8BotCode = rawBotStr.includes('อาคารชุด') ? '286066' : '286008';
       overrides = {
         coll_subtype: '0',
         bot_coll_code: s8BotCode,
         sub_bot_coll_code: '0',
-        room_no: `${rand(1,999)} / ${rand(1,999)}`,
+        room_no:      `${rand(1, 999)} / ${rand(1, 999)}`,
         build_reg_no: `${rand(1, 100)}`,
-        build_storey: `${rand(1, 20)}`,
-        build_no: `${rand(1,100)} / ${rand(1,100)}`,
-        build_name: 'BAAC Tower Test',
-        room_area: `${rand(24, 200)}`,
-        aprs_value: aprsValue
+        build_storey: `${rand(1, 10)}`,         // ตาม HTML: randomInt(1,10)
+        build_no:     `${rand(1, 100)} / ${rand(1, 100)}`,
+        build_name:   'baac tower',             // ← ตาม HTML default
+        room_area:    '1600',                   // ← ตาม HTML default value
+        aprs_value:   aprsValue
       };
       break;
     }
@@ -447,79 +472,87 @@ const buildCollateral = (collType, botCode, rawBotStr, accTypeStr, existingAprs,
     // ── Type 13: หนังสือค้ำประกัน ────────────────────────────────────────
     case '13': {
       aprsValue = aprsValue || `${rand(10, 100) * 100000}`;
-      // Subtype from bot code notation: 286061 (1)=บสย., (2)=บสย.รัฐ, (3)=กองทุน, (4)=กระทรวง
+      // coll_subtype จาก rawBotStr: (1)=บสย., (2)=บสย.Portfolio, (3)=กองทุน, (4)=กระทรวง
       let lgSubtype = '1';
       if      (rawBotStr.includes('(2)')) lgSubtype = '2';
       else if (rawBotStr.includes('(3)')) lgSubtype = '3';
       else if (rawBotStr.includes('(4)')) lgSubtype = '4';
 
       overrides = {
-        coll_subtype: lgSubtype,
-        bot_coll_code: '286061',
+        coll_subtype:      lgSubtype,
+        bot_coll_code:     '286061',
         sub_bot_coll_code: '0',
-        lg_no: `${rand(100000000, 999999999)}`,
-        lg_issue_date: today(),
-        aprs_value: aprsValue
+        lg_no:             `${rand(100000000, 999999999)}`,
+        lg_issue_date:     today(),
+        aprs_value:        aprsValue
       };
       break;
     }
 
     // ── Type 14: สลาก ────────────────────────────────────────────────────
+    // sub_bot_coll_code ถูก force เป็น "0" เสมอ (ตาม HTML: rqBody.sub_bot_coll_code = "0")
     case '14': {
       aprsValue = aprsValue || `${rand(10, 50) * 100000}`;
       overrides = {
-        coll_subtype: '0',
-        bot_coll_code: '286023',
-        sub_bot_coll_code: '0',
-        salak_account_no: `${rand(400000000000, 499999999999)}`,
-        cert_no: `${rand(100000000000, 999999999999)}`,
-        salak_group: `${pick(['A','B','C','D','E','F','G'])}${pick(['ก','ข','ซ','ฎ','ฑ','ธ','ต'])}`,
-        aprs_value: aprsValue
+        coll_subtype:      '0',
+        bot_coll_code:     '286023',
+        sub_bot_coll_code: '0',   // ← forced "0" ตาม HTML
+        salak_account_no:  `${rand(400000000000, 499999999999)}`,
+        cert_no:           `${rand(100000000000, 999999999999)}`,
+        salak_group:       `${pick(['A','B','C','D','E','F','G'])}${pick(['ก','ข','ซ','ฎ','ฑ','ธ','ต'])}`,
+        aprs_value:        aprsValue
       };
       break;
     }
 
     // ── Type 17: อสังหาริมทรัพย์อื่นๆ (ส.ป.ก.) ──────────────────────────
+    // aprs_value = land_value + build_value (ตาม HTML default case)
+    // land_doc_subtype ดึงจาก rawBotStr: "286008 (5) - โฉนดสปก." → "5"
     case '17': {
-      aprsValue = aprsValue || `${rand(3, 20) * 100000}`;
-      // land_doc_subtype from raw bot string "286008 (5) - โฉนดสปก."
-      const docMatch = rawBotStr.match(/\((\d+)\)/);
+      const totalAprs17  = aprsValue ? parseInt(aprsValue) : rand(3, 20) * 100000;
+      const landVal17    = Math.round(totalAprs17 * 0.75);
+      const buildVal17   = Math.round(totalAprs17 * 0.25);
+      aprsValue          = `${landVal17 + buildVal17}`;
+
+      // ดึง land_doc_subtype จาก notation "(5)" ใน rawBotStr
+      const docMatch       = rawBotStr.match(/\((\d+)\)/);
       const landDocSubtype = docMatch ? docMatch[1] : `${rand(1, 19)}`;
 
       overrides = {
-        coll_subtype: '1',
-        bot_coll_code: '286008',
-        sub_bot_coll_code: '',
-        land_doc_subtype: landDocSubtype,
-        land_no: `${rand(100000, 999999)}`,
-        land_volume_1: `${rand(1, 10)}`,
-        land_volume_2: `${rand(0, 3)}`,
-        land_volume_3: `${rand(0, 99)}`,
-        land_volume_4: '0',
-        land_value: aprsValue,
-        build_value: '0',
-        build_type: `${rand(1, 7)}`,
-        document_date: today(),
-        aprs_value: aprsValue
+        coll_subtype:      '1',
+        bot_coll_code:     '286008',
+        sub_bot_coll_code: '',    // ← Type 17 ไม่มี sub_bot (ตาม HTML)
+        land_doc_subtype:  landDocSubtype,
+        land_no:           `${rand(100000, 999999)}`,
+        land_volume_1:     `${rand(1, 10)}`,
+        land_volume_2:     `${rand(0, 3)}`,
+        land_volume_3:     `${rand(0, 99)}`,
+        land_volume_4:     '0',
+        ravang:            '',
+        land_value:        `${landVal17}`,
+        build_value:       `${buildVal17}`,
+        build_type:        `${rand(1, 7)}`,
+        document_date:     today(),
+        aprs_value:        aprsValue
       };
       break;
     }
 
     // ── Type 99: อื่นๆ (สินค้าคงคลัง / เรือ) ────────────────────────────
+    // type_of_commudity: เรือ → ว่าง, สินค้า → extract จาก "(N)" ใน rawBotStr
     case '99': {
       aprsValue = aprsValue || `${rand(5, 50) * 100000}`;
-      const isShip = rawBotStr.includes('286039') || rawBotStr.includes('เรือ');
-      // Product type from bot string "286214 (3) - ข้าวโพด" → type_of_commudity = "3"
+      const isShip    = rawBotStr.includes('286039') || rawBotStr.includes('เรือ');
       const prodMatch = rawBotStr.match(/\((\d+)\)/);
-      const commudity = prodMatch ? prodMatch[1] : '';
+      const commudity = prodMatch ? prodMatch[1] : '1';  // 1-9, 99
 
       overrides = {
-        coll_subtype: '0',
-        bot_coll_code: isShip ? '286039' : '286214',
-        sub_bot_coll_code: '0',
+        coll_subtype:           '0',
+        bot_coll_code:          isShip ? '286039' : '286214',
+        sub_bot_coll_code:      '0',
         collateral_description: isShip ? 'เรือประมง' : 'สินค้าคงคลัง',
-        type_of_commudity: isShip ? '' : commudity,
-        aprs_value: aprsValue
+        type_of_commudity:      isShip ? '' : commudity,
+        aprs_value:             aprsValue
       };
       break;
     }
