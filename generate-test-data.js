@@ -320,12 +320,10 @@ const collBase = (collType, botCode, subBotCode, contractDate) => ({
  * Returns { payload, aprsValue }
  */
 const buildCollateral = (collType, botCode, rawBotStr, accTypeStr, existingAprs, contractDate) => {
-  // Determine sub_bot_coll_code from raw bot string notation e.g. "286011 - เครื่องจักร (1)"
+  // sub_bot_coll_code สำหรับ type 3: ดึงจาก "(0)"/"(1)"/"(2)" ใน rawBotStr
   let subBot = '0';
-  const subMatch = rawBotStr.match(/\((\d+)\)\s*[-–]?\s*(?!ต้น|อาคาร)/);
   if (rawBotStr.includes('เครื่องจักร (1)')) subBot = '1';
   else if (rawBotStr.includes('เครื่องจักร (2)')) subBot = '2';
-  else if (rawBotStr.includes('ไม้ยืนต้น')) subBot = '2';
 
   const base = collBase(collType, botCode, subBot, contractDate);
 
@@ -337,9 +335,6 @@ const buildCollateral = (collType, botCode, rawBotStr, accTypeStr, existingAprs,
     // ── Type 1: ที่ดิน ────────────────────────────────────────────────────
     // aprs_value = land_value + build_value (HTML คำนวณ sum เอง)
     case '1': {
-      // ถ้ามี aprs_value จาก CSV ให้ split เป็น land + build
-      // 286006 (ที่ดิน+สิ่งปลูกสร้าง): land ~65%, build ~35%
-      // 286003 (ที่ดินเปล่า): land = 100%
       const totalAprs = aprsValue ? parseInt(aprsValue) : parseInt(randAprs());
       const landVal  = botCode === '286006'
         ? Math.round(totalAprs * 0.65)
@@ -347,19 +342,23 @@ const buildCollateral = (collType, botCode, rawBotStr, accTypeStr, existingAprs,
       const buildVal = botCode === '286006'
         ? Math.round(totalAprs * 0.35)
         : 0;
-      // aprs_value = land_value + build_value (ตาม HTML)
       aprsValue = `${landVal + buildVal}`;
 
+      // sub_bot_coll_code: 0=ที่ดินเปล่า(บ่อย), 1=แผงค้า, 2=พื้นที่ห้าง
+      const r1 = rand(1, 10);
+      const t1SubBot = r1 <= 7 ? '0' : r1 <= 8 ? '1' : '2';
+
       overrides = {
-        coll_subtype: '1',
-        land_no: `${rand(100000, 999999)}`,
+        coll_subtype:      '1',   // default type 1 = โฉนด
+        sub_bot_coll_code: t1SubBot,
+        land_no:       `${rand(100000, 999999)}`,
         land_volume_1: `${rand(1, 10)}`,
         land_volume_2: `${rand(0, 3)}`,
         land_volume_3: `${rand(0, 99)}`,
         land_volume_4: '0',
-        ravang: '',
-        land_value: `${landVal}`,
-        build_value: buildVal ? `${buildVal}` : '',
+        ravang:        '',
+        land_value:    `${landVal}`,
+        build_value:   buildVal ? `${buildVal}` : '',
         ...(botCode === '286006' ? { build_type: `${rand(1, 7)}` } : {})
       };
       break;
@@ -379,8 +378,8 @@ const buildCollateral = (collType, botCode, rawBotStr, accTypeStr, existingAprs,
       const buildType = rawBotStr.includes('ไม้ยืนต้น') ? '9' : `${rand(1, 7)}`;
 
       overrides = {
-        bot_coll_code: s2BotCode,
-        sub_bot_coll_code: s2SubBot,
+        bot_coll_code:     s2BotCode,
+        sub_bot_coll_code: '0',   // type 2 = 0 เสมอ
         build_no: `${rand(1, 999)}`,
         build_type: buildType,
         aprs_value: aprsValue
@@ -463,7 +462,7 @@ const buildCollateral = (collType, botCode, rawBotStr, accTypeStr, existingAprs,
       overrides = {
         coll_subtype: '0',
         bot_coll_code: s8BotCode,
-        sub_bot_coll_code: '',   // ← "" ตาม HTML (Type 8 ไม่มี sub_bot options)
+        sub_bot_coll_code: '0',   // type 8 = 0
         room_no:      `${rand(1, 999)} / ${rand(1, 999)}`,
         build_reg_no: `${rand(1, 100)}`,
         build_storey: `${rand(1, 10)}`,         // ตาม HTML: randomInt(1,10)
@@ -527,7 +526,7 @@ const buildCollateral = (collType, botCode, rawBotStr, accTypeStr, existingAprs,
       overrides = {
         coll_subtype:      '1',
         bot_coll_code:     '286008',
-        sub_bot_coll_code: '',    // ← Type 17 ไม่มี sub_bot (ตาม HTML)
+        sub_bot_coll_code: landDocSubtype,  // type 17: ดึง (N) จาก col9 เช่น (5)=โฉนดสปก.
         land_doc_subtype:  landDocSubtype,
         land_no:           `${rand(100000, 999999)}`,
         land_volume_1:     `${rand(1, 10)}`,
@@ -555,7 +554,7 @@ const buildCollateral = (collType, botCode, rawBotStr, accTypeStr, existingAprs,
       overrides = {
         coll_subtype:           '0',
         bot_coll_code:          isShip ? '286039' : '286214',
-        sub_bot_coll_code:      '',   // ← "" ตาม HTML (Type 99 ไม่มี sub_bot options)
+        sub_bot_coll_code:      '0',   // type 99 = 0
         collateral_description: isShip ? 'เรือประมง' : 'สินค้าคงคลัง',
         type_of_commudity:      isShip ? '' : commudity,
         aprs_value:             aprsValue
