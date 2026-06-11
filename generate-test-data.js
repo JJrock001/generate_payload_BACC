@@ -14,7 +14,7 @@ const fs   = require('fs');
 const path = require('path');
 
 // ─── CONFIG ────────────────────────────────────────────────────────────────
-const PLANNING_CSV = '/Users/nachaphonmaleewong/Downloads/BAAC-PHOENIX-COLL-DATA2569_V.0.0.csv';
+const PLANNING_CSV = path.join(__dirname, 'BAAC-PHOENIX-COLL-DATA2569_V.0.0.csv');
 const OUTPUT_DIR   = __dirname;
 const BRANCH_CODE  = '611';
 
