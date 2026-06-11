@@ -71,12 +71,21 @@
 
 **Col 9 — coll_subtype (ตัวอย่าง)**
 
-Script automatic fills this based on collateral type:
+Script auto-fills based on collateral type and BOT code:
+
 | Type | ค่า | ความหมาย |
 |---|---|---|
-| 1, 17 | `1 - โฉนด` | default |
-| 13 | `1 - บสย.` / `2 - บสย. (Portfolio...)` / `3 - กองทุนบำเหน็ด` / `4 - หนังสือประกันฯ` | extracted from col 10 |
+| 1, 17 | `1 - โฉนด` | fixed default |
+| 13 | extracted from col 10 | see Type 13 mapping below |
 | อื่นๆ | `0` | default |
+
+**Type 13 subtype mapping from BOT code (col 10):**
+| BOT Code | coll_subtype |
+|---|---|
+| `286061 - บสย.` | `1 - บสย.` |
+| `286061 - บสย. รัฐ` | `2 - บสย. (Portfolio Guarantee Scheme)` |
+| `286061 - กองทุนบำเหน็ดตกทอด` | `3 - กองทุนบำเหน็ดตกทอด` |
+| `286061 - หนังสือประกันกระทรวงการคลัง` | `4 - หนังสือประกันกระทรวงการคลัง` |
 
 **Col 10 — BOT Code (ตัวอย่างที่สำคัญ)**
 | รหัส | ความหมาย |
