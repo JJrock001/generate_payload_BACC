@@ -672,9 +672,10 @@ for (const row of rows) {
   const accTypeStr      = row[14] || '';   // used for bond expiry / deposit sub-type
   const contractDateRaw = row[16] || '';
   const contractDate    = beToAD(contractDateRaw) || genDate(2028, 2035);
-  // ── NEW: override columns ─────────────────────────────────────────────────
-  const csvCollSubtype    = (row[22] || '').trim();  // Col 22: coll_subtype override
-  const csvSubBotCollCode = (row[23] || '').trim();  // Col 23: รหัสหลักประกันย่อย override
+  // ── NEW: override columns (extract code from "N - description" format) ──────
+  const extractCode       = s => ((s||'').trim().match(/^(\d+)/) || [])[1] || '';
+  const csvCollSubtype    = extractCode(row[22]);  // Col 22: coll_subtype e.g. "1 - โฉนด" → "1"
+  const csvSubBotCollCode = extractCode(row[23]);  // Col 23: sub_bot e.g. "0 - ที่ดินเปล่า" → "0"
 
   // ── BUILD PAYLOADS ─────────────────────────────────────────────────────────
   const customerBody   = isPersonal
