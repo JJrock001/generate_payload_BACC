@@ -666,16 +666,19 @@ for (const row of rows) {
   const grade           = parseGrade(row[5]);
   const existingCIF     = (row[6] || '').trim();
   const existingCollId  = (row[7] || '').trim();
-  const rawBotStr       = row[9] || '';
-  const botCode         = parseBotCode(rawBotStr);
-  const aprsRaw         = cleanAmount(row[12]);
-  const accTypeStr      = row[14] || '';   // used for bond expiry / deposit sub-type
-  const contractDateRaw = row[16] || '';
+  // ── REORGANIZED COLUMNS (shifted after col 8 & 9) ──────────────────────────
+  const rawCollSubtype  = row[9] || '';   // Col 9: coll_subtype (moved before BOT)
+  const rawBotStr       = row[10] || '';  // Col 10: รหัสหลักประกันธนาคารแห่งประเทศไทย (from old col 9)
+  const rawSubBot       = row[11] || '';  // Col 11: รหัสหลักประกันย่อย (from old col 23)
+  const aprsRaw         = cleanAmount(row[13]);  // Col 13: ราคาประเมินรวม (from old col 12)
+  const accTypeStr      = row[15] || '';  // Col 15: AccType (from old col 14)
+  const contractDateRaw = row[17] || '';  // Col 17: วันหมดอายุสัญญาเงินกู้ (from old col 16)
   const contractDate    = beToAD(contractDateRaw) || genDate(2028, 2035);
-  // ── NEW: override columns (extract code from "N - description" format) ──────
+  const botCode         = parseBotCode(rawBotStr);
+  // ── Extract code from "N - description" format ──────────────────────────────
   const extractCode       = s => ((s||'').trim().match(/^(\d+)/) || [])[1] || '';
-  const csvCollSubtype    = extractCode(row[22]);  // Col 22: coll_subtype e.g. "1 - โฉนด" → "1"
-  const csvSubBotCollCode = extractCode(row[23]);  // Col 23: sub_bot e.g. "0 - ที่ดินเปล่า" → "0"
+  const csvCollSubtype    = extractCode(rawCollSubtype);  // Col 9: coll_subtype
+  const csvSubBotCollCode = extractCode(rawSubBot);       // Col 11: sub_bot_coll_code
 
   // ── BUILD PAYLOADS ─────────────────────────────────────────────────────────
   const customerBody   = isPersonal
