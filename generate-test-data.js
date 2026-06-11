@@ -670,15 +670,17 @@ for (const row of rows) {
   const rawCollSubtype  = row[9] || '';   // Col 9: coll_subtype (moved before BOT)
   const rawBotStr       = row[10] || '';  // Col 10: รหัสหลักประกันธนาคารแห่งประเทศไทย (from old col 9)
   const rawSubBot       = row[11] || '';  // Col 11: รหัสหลักประกันย่อย (from old col 23)
-  const aprsRaw         = cleanAmount(row[13]);  // Col 13: ราคาประเมินรวม (from old col 12)
-  const accTypeStr      = row[15] || '';  // Col 15: AccType (from old col 14)
-  const contractDateRaw = row[17] || '';  // Col 17: วันหมดอายุสัญญาเงินกู้ (from old col 16)
+  const rawCommudity    = row[12] || '';  // Col 12: type_of_commudity (NEW, inserted)
+  const aprsRaw         = cleanAmount(row[14]);  // Col 14: ราคาประเมินรวม (shifted from col 13)
+  const accTypeStr      = row[16] || '';  // Col 16: AccType (shifted from col 15)
+  const contractDateRaw = row[18] || '';  // Col 18: วันหมดอายุสัญญาเงินกู้ (shifted from col 17)
   const contractDate    = beToAD(contractDateRaw) || genDate(2028, 2035);
   const botCode         = parseBotCode(rawBotStr);
   // ── Extract code from "N - description" format ──────────────────────────────
   const extractCode       = s => ((s||'').trim().match(/^(\d+)/) || [])[1] || '';
   const csvCollSubtype    = extractCode(rawCollSubtype);  // Col 9: coll_subtype
   const csvSubBotCollCode = extractCode(rawSubBot);       // Col 11: sub_bot_coll_code
+  const csvCommudity      = extractCode(rawCommudity);    // Col 12: type_of_commudity
 
   // ── BUILD PAYLOADS ─────────────────────────────────────────────────────────
   const customerBody   = isPersonal
@@ -690,9 +692,10 @@ for (const row of rows) {
   let { payload: collBody, aprsValue } = buildCollateral(
     collType, botCode, rawBotStr, accTypeStr, aprsRaw, contractDate
   );
-  // apply CSV override สำหรับ coll_subtype และ sub_bot_coll_code (ถ้ากรอกไว้ใน CSV)
+  // apply CSV override สำหรับ coll_subtype, sub_bot_coll_code, type_of_commudity (ถ้ากรอกไว้ใน CSV)
   if (csvCollSubtype    !== '') collBody.coll_subtype        = csvCollSubtype;
   if (csvSubBotCollCode !== '') collBody.sub_bot_coll_code   = csvSubBotCollCode;
+  if (csvCommudity      !== '') collBody.type_of_commudity   = csvCommudity;
 
   const ownerBody = buildOwnerTemplate();
 
