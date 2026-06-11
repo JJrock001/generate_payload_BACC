@@ -1,0 +1,15 @@
+# Planning CSV (large data file - keep local only)
+BAAC-PHOENIX-COLL-DATA2569_V.0.0.csv
+
+# Node modules
+node_modules/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
