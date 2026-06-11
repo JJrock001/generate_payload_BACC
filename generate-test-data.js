@@ -662,17 +662,20 @@ for (const row of rows) {
   }
 
   // ── PARSE ROW FIELDS ──────────────────────────────────────────────────────
-  const custTypeCode  = parseCustType(row[4]);
-  const isPersonal    = PERSONAL_TYPES.has(custTypeCode);
-  const grade         = parseGrade(row[5]);
-  const existingCIF   = (row[6] || '').trim();
-  const existingCollId= (row[7] || '').trim();
-  const rawBotStr     = row[9] || '';
-  const botCode       = parseBotCode(rawBotStr);
-  const aprsRaw       = cleanAmount(row[12]);
-  const accTypeStr    = row[14] || '';   // used for bond expiry / deposit sub-type
+  const custTypeCode    = parseCustType(row[4]);
+  const isPersonal      = PERSONAL_TYPES.has(custTypeCode);
+  const grade           = parseGrade(row[5]);
+  const existingCIF     = (row[6] || '').trim();
+  const existingCollId  = (row[7] || '').trim();
+  const rawBotStr       = row[9] || '';
+  const botCode         = parseBotCode(rawBotStr);
+  const aprsRaw         = cleanAmount(row[12]);
+  const accTypeStr      = row[14] || '';   // used for bond expiry / deposit sub-type
   const contractDateRaw = row[16] || '';
-  const contractDate  = beToAD(contractDateRaw) || genDate(2028, 2035);
+  const contractDate    = beToAD(contractDateRaw) || genDate(2028, 2035);
+  // ── NEW: override columns ─────────────────────────────────────────────────
+  const csvCollSubtype    = (row[22] || '').trim();  // Col 22: coll_subtype override
+  const csvSubBotCollCode = (row[23] || '').trim();  // Col 23: รหัสหลักประกันย่อย override
 
   // ── BUILD PAYLOADS ─────────────────────────────────────────────────────────
   const customerBody   = isPersonal
@@ -681,9 +684,12 @@ for (const row of rows) {
 
   const registrationBody = buildRegistration(grade);
 
-  const { payload: collBody, aprsValue } = buildCollateral(
+  let { payload: collBody, aprsValue } = buildCollateral(
     collType, botCode, rawBotStr, accTypeStr, aprsRaw, contractDate
   );
+  // apply CSV override สำหรับ coll_subtype และ sub_bot_coll_code (ถ้ากรอกไว้ใน CSV)
+  if (csvCollSubtype    !== '') collBody.coll_subtype        = csvCollSubtype;
+  if (csvSubBotCollCode !== '') collBody.sub_bot_coll_code   = csvSubBotCollCode;
 
   const ownerBody = buildOwnerTemplate();
 
